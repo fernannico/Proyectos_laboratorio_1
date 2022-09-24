@@ -14,28 +14,19 @@ float CalcularSuma(float num1, float num2){
 	return suma;
 }
 
-float CaclcularCostoMantenimiento(float costoComida, float costoHospedaje, float costoTransporte){
-	float costoMantenimiento;
 
-	costoMantenimiento = CalcularSuma(costoComida, costoHospedaje);
-	costoMantenimiento = CalcularSuma(costoMantenimiento, costoTransporte);
+float CalcularPorcentaje(float valorInicial, int porcentaje){
+	float valorPorcentaje;
 
-	return costoMantenimiento;
+	valorPorcentaje = (valorInicial * porcentaje) / 100;
+
+	return valorPorcentaje;
 }
 
-float CalcularAumento(float valorInicial, int porcentaje){
-	float aumento;
-
-	aumento = (valorInicial * porcentaje) / 100;
-
-	return aumento;
-}
-
-///				esto es:	acumulador		contador
-float CalcularPromedio(int numerador, int divisor){
+float CalcularPromedio(int acumulador, int contador){
 	float promedio;
-///			esto es:  acumulador / contador
-	promedio = (float)numerador / divisor;
+
+	promedio = (float)acumulador / contador;
 
 	return promedio;
 }

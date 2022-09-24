@@ -1,16 +1,7 @@
 /*
- ============================================================================
-
-Dicho plantel contara con un costo de mantenimiento, que va a estar compuesto por:
-Gastos de Transporte, Hospedaje y Comida. El usuario deberá cargar todos los gastos.
-
- ============================================================================
- */
-
-/**
- * biblioteca para logica y otra para pedido de datos (input)
- * test commit
- * */
+ Alumno: Nicolas Ivan Fernandez
+ Division: K
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,12 +10,6 @@ Gastos de Transporte, Hospedaje y Comida. El usuario deberá cargar todos los ga
 #include "operaciones.h"
 
 #define TAM 22
-#define UEFA 1
-#define CONMEBOL 2
-#define CONCACAF 3
-#define AFC 4
-#define OFC 5
-#define CAF 6
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -46,13 +31,13 @@ int main(void) {
 	int contadorDefensores;
 	int contadorMediocampistas;
 	int contadorDelanteros;
-	int cantidadJugadores;
-	int contadorUefa;
-	int contadorConmebol;
-	int contadorConcacaf;
-	int contadorAfc;
-	int contadorOfc;
-	int contadorCaf;
+	int contadorJugadores;
+	int acumuladorUefa;
+	int acumuladorConmebol;
+	int acumuladorConcacaf;
+	int acumuladorAfc;
+	int acumuladorOfc;
+	int acumuladorCaf;
 	float promedioUefa;
 	float promedioConmebol;
 	float promedioConcacaf;
@@ -63,20 +48,20 @@ int main(void) {
 	int banderaOpcion2;
 	int banderaOpcion3;
 
-	acumuladorCostoHospedaje = 5000;				///cambiar a 0
-	acumuladorCostoComida = 3000;					///cambiar a 0
-	acumuladorCostoTransporte = 0;				///cambiar a 0
+	acumuladorCostoHospedaje = 0;				///cambiar a 0
+	acumuladorCostoComida = 0;					///cambiar a 0
+	acumuladorCostoTransporte = 0;
 	contadorArqueros = 0;
 	contadorDefensores = 0;
 	contadorMediocampistas = 0;
 	contadorDelanteros = 0;
-	cantidadJugadores = 0;
-	contadorUefa = 0;
-	contadorConmebol = 0;
-	contadorConcacaf = 0;
-	contadorAfc = 0;
-	contadorOfc = 0;
-	contadorCaf = 0;
+	contadorJugadores = 0;
+	acumuladorUefa = 0;
+	acumuladorConmebol = 0;
+	acumuladorConcacaf = 0;
+	acumuladorAfc = 0;
+	acumuladorOfc = 0;
+	acumuladorCaf = 0;
 	banderaOpcion1 = 0;
 	banderaOpcion2 = 0;
 	banderaOpcion3 = 0;
@@ -84,6 +69,7 @@ int main(void) {
 	do {
 		ImprimirMenu(acumuladorCostoHospedaje, acumuladorCostoComida, acumuladorCostoTransporte, contadorArqueros, contadorDefensores, contadorMediocampistas, contadorDelanteros);
 		opcion = IngresarEnteroValidado("\nopcion:", "\nIngresar una opcion entre 1 - 5", 1, 5);
+		//fflush(stdin);
 		switch (opcion) {
 			case 1:
 				do{
@@ -114,7 +100,7 @@ int main(void) {
 
 				break;
 			case 2:
-				if(cantidadJugadores < TAM){
+				if(contadorJugadores < TAM){
 					do{
 						ImprimirCantidadJugadores(contadorArqueros, contadorDefensores, contadorMediocampistas, contadorDelanteros);
 						subopcion = IngresarEnteroValidado("\nIngrese un jugador segun la posicion [1-2-3-4]", "\Error de opcion, reintente [1-2-3-4]", 1, 4);
@@ -126,11 +112,11 @@ int main(void) {
 									numeroCamiseta = IngresarEnteroValidado("\nIngresar número de camiseta de 1 a 99: ", "Error,  ingresar una camiseta valida de 1 a 99", 1, 99);
 									printf("Se ingreso la camiseta numero %d\n", numeroCamiseta);
 
-									ImprimirSubmenuConfederaciones(contadorUefa, contadorConmebol, contadorConcacaf, contadorAfc, contadorOfc, contadorCaf);
+									ImprimirSubmenuConfederaciones(acumuladorUefa, acumuladorConmebol, acumuladorConcacaf, acumuladorAfc, acumuladorOfc, acumuladorCaf);
 
 									subopcionConfederacion = IngresarEnteroValidado("\nIngrese la confederacion del jugador [1-2-3-4-5-6]", "\Error de opcion, reintente [1-2-3-4-5-6]", UEFA, CAF);
-									if(ContarConfederaciones(subopcionConfederacion, &contadorUefa, &contadorConmebol, &contadorConcacaf, &contadorAfc, &contadorOfc, &contadorCaf)){
-										printf("\nse ingresaron correctamente los datos");
+									if(ContarConfederaciones(subopcionConfederacion, &acumuladorUefa, &acumuladorConmebol, &acumuladorConcacaf, &acumuladorAfc, &acumuladorOfc, &acumuladorCaf)){
+										printf("\nSe ingreso correctamente al jugador");
 									}else{
 										printf("\nerror");
 									}
@@ -144,11 +130,11 @@ int main(void) {
 								if(contadorDefensores < 8){
 									numeroCamiseta = IngresarEnteroValidado("\nIngresar número de camiseta de 1 a 99: ", "Error,  ingresar una camiseta valida de 1 a 99", 1, 99);
 
-									ImprimirSubmenuConfederaciones(contadorUefa, contadorConmebol, contadorConcacaf, contadorAfc, contadorOfc, contadorCaf);
+									ImprimirSubmenuConfederaciones(acumuladorUefa, acumuladorConmebol, acumuladorConcacaf, acumuladorAfc, acumuladorOfc, acumuladorCaf);
 
 									subopcionConfederacion = IngresarEnteroValidado("\nIngrese la confederacion del jugador [1-2-3-4-5-6]", "\Error de opcion, reintente [1-2-3-4-5-6]", UEFA, CAF);
-									if(ContarConfederaciones(subopcionConfederacion, &contadorUefa, &contadorConmebol, &contadorConcacaf, &contadorAfc, &contadorOfc, &contadorCaf)){
-										printf("\nse ingresaron correctamente los datos");
+									if(ContarConfederaciones(subopcionConfederacion, &acumuladorUefa, &acumuladorConmebol, &acumuladorConcacaf, &acumuladorAfc, &acumuladorOfc, &acumuladorCaf)){
+										printf("\nSe ingreso correctamente al jugador");
 									}else{
 										printf("\nerror");
 									}
@@ -161,11 +147,11 @@ int main(void) {
 								if(contadorMediocampistas < 8){
 									numeroCamiseta = IngresarEnteroValidado("\nIngresar número de camiseta de 1 a 99: ", "Error,  ingresar una camiseta valida de 1 a 99", 1, 99);
 
-									ImprimirSubmenuConfederaciones(contadorUefa, contadorConmebol, contadorConcacaf, contadorAfc, contadorOfc, contadorCaf);
+									ImprimirSubmenuConfederaciones(acumuladorUefa, acumuladorConmebol, acumuladorConcacaf, acumuladorAfc, acumuladorOfc, acumuladorCaf);
 
 									subopcionConfederacion = IngresarEnteroValidado("\nIngrese la confederacion del jugador [1-2-3-4-5-6]", "\Error de opcion, reintente [1-2-3-4-5-6]", UEFA, CAF);
-									if(ContarConfederaciones(subopcionConfederacion, &contadorUefa, &contadorConmebol, &contadorConcacaf, &contadorAfc, &contadorOfc, &contadorCaf)){
-										printf("\nse ingresaron correctamente los datos");
+									if(ContarConfederaciones(subopcionConfederacion, &acumuladorUefa, &acumuladorConmebol, &acumuladorConcacaf, &acumuladorAfc, &acumuladorOfc, &acumuladorCaf)){
+										printf("\nSe ingreso correctamente al jugador");
 									}else{
 										printf("\nerror");
 									}
@@ -178,11 +164,11 @@ int main(void) {
 								if(contadorDelanteros < 4){
 									numeroCamiseta = IngresarEnteroValidado("\nIngresar número de camiseta de 1 a 99: ", "Error,  ingresar una camiseta valida de 1 a 99", 1, 99);
 
-									ImprimirSubmenuConfederaciones(contadorUefa, contadorConmebol, contadorConcacaf, contadorAfc, contadorOfc, contadorCaf);
+									ImprimirSubmenuConfederaciones(acumuladorUefa, acumuladorConmebol, acumuladorConcacaf, acumuladorAfc, acumuladorOfc, acumuladorCaf);
 
 									subopcionConfederacion = IngresarEnteroValidado("\nIngrese la confederacion del jugador [1-2-3-4-5-6]", "\Error de opcion, reintente [1-2-3-4-5-6]", UEFA, CAF);
-									if(ContarConfederaciones(subopcionConfederacion, &contadorUefa, &contadorConmebol, &contadorConcacaf, &contadorAfc, &contadorOfc, &contadorCaf)){
-										printf("\nse ingresaron correctamente los datos");
+									if(ContarConfederaciones(subopcionConfederacion, &acumuladorUefa, &acumuladorConmebol, &acumuladorConcacaf, &acumuladorAfc, &acumuladorOfc, &acumuladorCaf)){
+										printf("\nSe ingreso correctamente al jugador");
 									}else{
 										printf("\nerror");
 									}
@@ -195,28 +181,35 @@ int main(void) {
 								printf("\nError de opcion, reintente [1-2-3-4]");
 								break;
 						}
-						cantidadJugadores++;
+						contadorJugadores++;
 						banderaOpcion2 = 1;
+
 						seguir = ValidarSeguirNoSeguir("\nIngresar otro jugador? [S|N]", "\nError de opcion");
-					}while(seguir == 'S');
+						if(seguir == 'S' && contadorJugadores > 21){
+							printf("\nSe han ingresado todos los jugadores");
+						}
+					}while(seguir == 'S' && contadorJugadores < TAM);
+				}else{
+					printf("\nSe han ingresado todos los jugadores");
 				}
 				break;
 			case 3:
 				if(ValidarIngresosDeDatos(banderaOpcion1, banderaOpcion2)){
 //					a. Calcular el promedio de jugadores de cada mercado.
-					promedioUefa = CalcularPromedio(contadorUefa, cantidadJugadores);
-					promedioConmebol = CalcularPromedio(contadorConmebol, cantidadJugadores);
-					promedioConcacaf = CalcularPromedio(contadorConcacaf, cantidadJugadores);
-					promedioAfc = CalcularPromedio(contadorAfc, cantidadJugadores);
-					promedioOfc = CalcularPromedio(contadorOfc, cantidadJugadores);
-					promedioCaf = CalcularPromedio(contadorCaf, cantidadJugadores);
+					promedioUefa = CalcularPromedio(acumuladorUefa, contadorJugadores);
+					promedioConmebol = CalcularPromedio(acumuladorConmebol, contadorJugadores);
+					promedioConcacaf = CalcularPromedio(acumuladorConcacaf, contadorJugadores);
+					promedioAfc = CalcularPromedio(acumuladorAfc, contadorJugadores);
+					promedioOfc = CalcularPromedio(acumuladorOfc, contadorJugadores);
+					promedioCaf = CalcularPromedio(acumuladorCaf, contadorJugadores);
 
 //					b. Calcular el costo de mantenimiento.
-					costoMantenimiento = CaclcularCostoMantenimiento(acumuladorCostoComida, acumuladorCostoHospedaje, acumuladorCostoTransporte);
+					costoMantenimiento = CalcularSuma(acumuladorCostoHospedaje, acumuladorCostoComida);
+					costoMantenimiento = CalcularSuma(costoMantenimiento, acumuladorCostoTransporte);
 
 //					c. Si la mayoría del plantel está compuesta por jugadores de la confederación europea el costo de mantenimiento recibe un aumento del 35%.
 					if(promedioUefa > 0.5){
-						montoAumentadoAlMantenimiento = CalcularAumento(costoMantenimiento, 35);
+						montoAumentadoAlMantenimiento = CalcularPorcentaje(costoMantenimiento, 35);
 						costoMantenimientoAumentado = CalcularSuma(costoMantenimiento, montoAumentadoAlMantenimiento);
 					}else{
 						costoMantenimientoAumentado = costoMantenimiento;
