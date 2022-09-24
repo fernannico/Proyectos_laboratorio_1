@@ -19,6 +19,8 @@
 float CalcularSuma(float num1, float num2);
 float CaclcularCostoMantenimiento(float costoComida, float costoHospedaje, float costoTransporte);
 float CalcularPromedio(int numerador, int divisor);
+float CalcularAumento(float valorInicial, int porcentaje);
+
 int ContarConfederaciones(int opcion, int* uefa, int* conmebol, int* concacaf, int* afc, int* ofc, int* caf);
 
 #endif /* OPERACIONES_H_ */

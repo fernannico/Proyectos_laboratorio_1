@@ -26,8 +26,6 @@ Gastos de Transporte, Hospedaje y Comida. El usuario deberá cargar todos los ga
 #define OFC 5
 #define CAF 6
 
-float CalcularAumento(float valorInicial, int porcentaje);
-
 int main(void) {
 	setbuf(stdout, NULL);
 	int opcion;
@@ -67,7 +65,7 @@ int main(void) {
 
 	acumuladorCostoHospedaje = 5000;				///cambiar a 0
 	acumuladorCostoComida = 3000;					///cambiar a 0
-	acumuladorCostoTransporte = 2000;				///cambiar a 0
+	acumuladorCostoTransporte = 0;				///cambiar a 0
 	contadorArqueros = 0;
 	contadorDefensores = 0;
 	contadorMediocampistas = 0;
@@ -79,7 +77,7 @@ int main(void) {
 	contadorAfc = 0;
 	contadorOfc = 0;
 	contadorCaf = 0;
-	banderaOpcion1 = 1;								///cambiar a 0
+	banderaOpcion1 = 0;
 	banderaOpcion2 = 0;
 	banderaOpcion3 = 0;
 
@@ -95,17 +93,14 @@ int main(void) {
 						case 1:
 							costoHospedaje = IngresarFloatValidado("\ningresar costo de hospedaje: ", "\nNo ingreso un valor valido", 1, 99999999);
 							acumuladorCostoHospedaje += costoHospedaje;
-							printf("Costo hospédaje %.2f\n", acumuladorCostoHospedaje);
 							break;
 						case 2:
 							costoComida = IngresarFloatValidado("\ningresar costo de comida: ", "\nNo ingreso un valor valido", 1, 99999999);
 							acumuladorCostoComida += costoComida;
-							printf("Costo comida %.2f\n", acumuladorCostoComida);
 							break;
 						case 3:
 							costoTransporte = IngresarFloatValidado("\ningresar costo de transporte: ", "\nNo ingreso un valor valido", 1, 99999999);
 							acumuladorCostoTransporte += costoTransporte;
-							printf("Costo transporte %.2f\n", acumuladorCostoTransporte);
 							break;
 						default:
 							printf("\nerror de opcion");
@@ -207,9 +202,7 @@ int main(void) {
 				}
 				break;
 			case 3:
-				if(banderaOpcion1 == 0 || banderaOpcion2 == 0){
-					printf("\nFaltan ingresar valores en la opcion 1 y 2");///hacer que me diga qué falta
-				}else{
+				if(ValidarIngresosDeDatos(banderaOpcion1, banderaOpcion2)){
 //					a. Calcular el promedio de jugadores de cada mercado.
 					promedioUefa = CalcularPromedio(contadorUefa, cantidadJugadores);
 					promedioConmebol = CalcularPromedio(contadorConmebol, cantidadJugadores);
@@ -223,14 +216,12 @@ int main(void) {
 
 //					c. Si la mayoría del plantel está compuesta por jugadores de la confederación europea el costo de mantenimiento recibe un aumento del 35%.
 					if(promedioUefa > 0.5){
-						//montoAumentadoAlMantenimiento = costoMantenimiento * 0.35;
 						montoAumentadoAlMantenimiento = CalcularAumento(costoMantenimiento, 35);
 						costoMantenimientoAumentado = CalcularSuma(costoMantenimiento, montoAumentadoAlMantenimiento);
 					}else{
 						costoMantenimientoAumentado = costoMantenimiento;
 					}
 
-					//					solo informar que se realizaron correctamente los siguientes caculos:
 					printf( "\n\t-------------------------------------"
 							"\n\tSe han realizado los calculos!"
 							"\n\t-------------------------------------");
@@ -238,8 +229,8 @@ int main(void) {
 				}
 				break;
 			case 4:
-				if(banderaOpcion1 == 0 || banderaOpcion2 == 0 || banderaOpcion3 == 0){
-					printf("\nFaltan ingresar valores en la opcion 1 y 2 y no se han realizado los calculos");
+				if(ValidarIngresosDeDatos(banderaOpcion1, banderaOpcion2) == 0 || banderaOpcion3 == 0){
+					printf("\nno se han realizado los calculos");
 				}else{
 					if(promedioUefa > 0.5){
 						ImprimirResultados(promedioUefa, promedioConmebol, promedioConcacaf, promedioAfc, promedioOfc, promedioCaf);
@@ -262,13 +253,7 @@ int main(void) {
 	return EXIT_SUCCESS;
 }
 
-float CalcularAumento(float valorInicial, int porcentaje){
-	float aumento;
 
-	aumento = (valorInicial * porcentaje) / 100;
-
-	return aumento;
-}
 
 
 

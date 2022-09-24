@@ -23,6 +23,14 @@ float CaclcularCostoMantenimiento(float costoComida, float costoHospedaje, float
 	return costoMantenimiento;
 }
 
+float CalcularAumento(float valorInicial, int porcentaje){
+	float aumento;
+
+	aumento = (valorInicial * porcentaje) / 100;
+
+	return aumento;
+}
+
 ///				esto es:	acumulador		contador
 float CalcularPromedio(int numerador, int divisor){
 	float promedio;

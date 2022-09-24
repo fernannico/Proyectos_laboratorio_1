@@ -11,14 +11,14 @@
 void ImprimirMenu(int costosHospedaje, int costosComida, int costosTransporte, int contadorArqueros, int contadorDefensores, int contadorMediocampistas, int contadorDelanteros){
 	printf( "\n--------------------------------------------"
 			"\n1. Ingreso de los costos de Mantenimiento."
-				"\n Costo de hospedaje -> $%d"
-				"\n Costo de comida -> $%d"
-				"\n Costo de transporte -> $%d"
+				"\n     Costo de hospedaje -> $%d"
+				"\n     Costo de comida -> $%d"
+				"\n     Costo de transporte -> $%d"
 			"\n2. Carga de jugadores:"
-				"\n Arqueros -> %d"
-				"\n Defensores -> %d"
-				"\n Mediocampistas -> %d"
-				"\n Delanteros -> %d"
+				"\n     Arqueros -> %d"
+				"\n     Defensores -> %d"
+				"\n     Mediocampistas -> %d"
+				"\n     Delanteros -> %d"
 			"\n3. Realizar todos los cálculos."
 			"\n4. Informar todos los resultados."
 			"\n5. Salir.", costosHospedaje, costosComida, costosTransporte, contadorArqueros, contadorDefensores, contadorMediocampistas, contadorDelanteros);
@@ -58,6 +58,23 @@ void ImprimirResultados(float promedioUefa, float promedioConmebol, float promed
 			"\nPromedio Caf %.2f", promedioUefa, promedioConmebol, promedioConcacaf, promedioAfc, promedioOfc, promedioCaf);
 }
 
+int ValidarIngresosDeDatos(int banderaOpcion1, int banderaOpcion2){
+	int retorno = 0;
+	if(banderaOpcion1 == 0 && banderaOpcion2 == 1){
+		printf("\nFaltan ingresar valores en la opcion 1");
+	}else{
+		if(banderaOpcion1 == 1 && banderaOpcion2 == 0){
+			printf("\nFaltan ingresar valores en la opcion 2");
+		}else{
+			if(banderaOpcion1 == 0 || banderaOpcion2 == 0){
+				printf("\nFaltan ingresar valores en la opcion 1 y 2");
+			}else{
+				retorno = 1;
+			}
+		}
+	}
+	return retorno;
+}
 
 
 
