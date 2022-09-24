@@ -16,6 +16,7 @@ Gastos de Transporte, Hospedaje y Comida. El usuario deberá cargar todos los ga
 #include <stdlib.h>
 #include "output.h"
 #include "input.h"
+#include "operaciones.h"
 
 #define TAM 22
 #define UEFA 1
@@ -25,7 +26,7 @@ Gastos de Transporte, Hospedaje y Comida. El usuario deberá cargar todos los ga
 #define OFC 5
 #define CAF 6
 
-float CalcularPromedio(int numerador, int divisor);
+float CalcularAumento(float valorInicial, int porcentaje);
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -64,9 +65,9 @@ int main(void) {
 	int banderaOpcion2;
 	int banderaOpcion3;
 
-	acumuladorCostoHospedaje = 0;
-	acumuladorCostoComida = 0;
-	acumuladorCostoTransporte = 0;
+	acumuladorCostoHospedaje = 5000;				///cambiar a 0
+	acumuladorCostoComida = 3000;					///cambiar a 0
+	acumuladorCostoTransporte = 2000;				///cambiar a 0
 	contadorArqueros = 0;
 	contadorDefensores = 0;
 	contadorMediocampistas = 0;
@@ -78,7 +79,7 @@ int main(void) {
 	contadorAfc = 0;
 	contadorOfc = 0;
 	contadorCaf = 0;
-	banderaOpcion1 = 0;
+	banderaOpcion1 = 1;								///cambiar a 0
 	banderaOpcion2 = 0;
 	banderaOpcion3 = 0;
 
@@ -218,12 +219,13 @@ int main(void) {
 					promedioCaf = CalcularPromedio(contadorCaf, cantidadJugadores);
 
 //					b. Calcular el costo de mantenimiento.
-					costoMantenimiento = acumuladorCostoComida + acumuladorCostoHospedaje + acumuladorCostoTransporte;
+					costoMantenimiento = CaclcularCostoMantenimiento(acumuladorCostoComida, acumuladorCostoHospedaje, acumuladorCostoTransporte);
 
 //					c. Si la mayoría del plantel está compuesta por jugadores de la confederación europea el costo de mantenimiento recibe un aumento del 35%.
 					if(promedioUefa > 0.5){
-						montoAumentadoAlMantenimiento = costoMantenimiento * 0.35;
-						costoMantenimientoAumentado = costoMantenimiento + montoAumentadoAlMantenimiento;
+						//montoAumentadoAlMantenimiento = costoMantenimiento * 0.35;
+						montoAumentadoAlMantenimiento = CalcularAumento(costoMantenimiento, 35);
+						costoMantenimientoAumentado = CalcularSuma(costoMantenimiento, montoAumentadoAlMantenimiento);
 					}else{
 						costoMantenimientoAumentado = costoMantenimiento;
 					}
@@ -260,13 +262,17 @@ int main(void) {
 	return EXIT_SUCCESS;
 }
 
-float CalcularPromedio(int numerador, int divisor){
-	float promedio;
+float CalcularAumento(float valorInicial, int porcentaje){
+	float aumento;
 
-	promedio = (float)numerador / divisor;
+	aumento = (valorInicial * porcentaje) / 100;
 
-	return promedio;
+	return aumento;
 }
+
+
+
+
 
 
 
