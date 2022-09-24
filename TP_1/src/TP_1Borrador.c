@@ -9,6 +9,7 @@ Gastos de Transporte, Hospedaje y Comida. El usuario deberá cargar todos los ga
 
 /**
  * biblioteca para logica y otra para pedido de datos (input)
+ * test commit
  * */
 
 #include <stdio.h>
