@@ -47,7 +47,7 @@ int getInt(int * pResultado)
 int myGets(char * cadena, int longitud)
 {
 	int retorno = -1;
-	char bufferString[5000];
+	char bufferString[4096];
 
 	if(cadena != NULL && longitud > 0)
 	{

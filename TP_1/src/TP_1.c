@@ -19,9 +19,6 @@ int main(void) {
 	float costoHospedaje;
 	float costoComida;
 	float costoTransporte;
-	float costoMantenimiento;
-	float montoAumentadoAlMantenimiento;
-	float costoMantenimientoAumentado;
 	int numeroCamiseta;
 	int contadorArqueros;
 	int contadorDefensores;
@@ -40,6 +37,9 @@ int main(void) {
 	float promedioAfc;
 	float promedioOfc;
 	float promedioCaf;
+	float costoMantenimiento;
+	float montoAumentadoAlMantenimiento;
+	float costoMantenimientoAumentado;
 	int banderaOpcionUno;
 	int banderaOpcionDos;
 	int banderaOpcionTres;
