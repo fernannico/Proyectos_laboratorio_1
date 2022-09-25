@@ -7,13 +7,12 @@
 
 #include "output.h"
 
-
-void ImprimirMenu(int costosHospedaje, int costosComida, int costosTransporte, int contadorArqueros, int contadorDefensores, int contadorMediocampistas, int contadorDelanteros){
+void ImprimirMenu(float costosHospedaje, float costosComida, float costosTransporte, int contadorArqueros, int contadorDefensores, int contadorMediocampistas, int contadorDelanteros){
 	printf( "\n--------------------------------------------"
 			"\n1. Ingreso de los costos de Mantenimiento."
-				"\n     Costo de hospedaje -> $%d"
-				"\n     Costo de comida -> $%d"
-				"\n     Costo de transporte -> $%d"
+				"\n     Costo de hospedaje -> $%.2f"
+				"\n     Costo de comida -> $%.2f"
+				"\n     Costo de transporte -> $%.2f"
 			"\n2. Carga de jugadores:"
 				"\n     Arqueros -> %d"
 				"\n     Defensores -> %d"
@@ -24,10 +23,10 @@ void ImprimirMenu(int costosHospedaje, int costosComida, int costosTransporte, i
 			"\n5. Salir.", costosHospedaje, costosComida, costosTransporte, contadorArqueros, contadorDefensores, contadorMediocampistas, contadorDelanteros);
 }
 
-void ImprimirSubmenuMantenimiento(int costosHospedaje, int costosComida, int costosTransporte){
-	printf( "\n1. Costo de hospedaje -> $%d"
-			"\n2. Costo de comida -> $%d"
-			"\n3. Costo de transporte -> $%d", costosHospedaje, costosComida, costosTransporte);
+void ImprimirSubmenuMantenimiento(float costosHospedaje, float costosComida, float costosTransporte){
+	printf( "\n1. Costo de hospedaje -> $%.2f"
+			"\n2. Costo de comida -> $%.2f"
+			"\n3. Costo de transporte -> $%.2f", costosHospedaje, costosComida, costosTransporte);
 }
 
 void ImprimirCantidadJugadores(int contadorArqueros, int contadorDefensores, int contadorMediocampistas, int contadorDelanteros){
@@ -58,15 +57,15 @@ void ImprimirResultados(float promedioUefa, float promedioConmebol, float promed
 			"\nPromedio Caf %.2f", promedioUefa, promedioConmebol, promedioConcacaf, promedioAfc, promedioOfc, promedioCaf);
 }
 
-int ValidarIngresosDeDatos(int banderaOpcion1, int banderaOpcion2){
+int ValidarIngresosDeDatos(int banderaPrimerOpcion, int banderaSegundaOpcion){
 	int retorno = 0;
-	if(banderaOpcion1 == 0 && banderaOpcion2 == 1){
+	if(banderaPrimerOpcion == 0 && banderaSegundaOpcion == 1){
 		printf("\nFaltan ingresar valores en la opcion 1");
 	}else{
-		if(banderaOpcion1 == 1 && banderaOpcion2 == 0){
+		if(banderaPrimerOpcion == 1 && banderaSegundaOpcion == 0){
 			printf("\nFaltan ingresar valores en la opcion 2");
 		}else{
-			if(banderaOpcion1 == 0 || banderaOpcion2 == 0){
+			if(banderaPrimerOpcion == 0 || banderaSegundaOpcion == 0){
 				printf("\nFaltan ingresar valores en la opcion 1 y 2");
 			}else{
 				retorno = 1;

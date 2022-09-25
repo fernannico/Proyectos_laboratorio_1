@@ -6,10 +6,10 @@
  */
 #include "operaciones.h"
 
-float CalcularSuma(float num1, float num2){
+float CalcularSuma(float numeroUno, float numeroDos){
 	float suma;
 
-	suma = num1 + num2;
+	suma = numeroUno + numeroDos;
 
 	return suma;
 }
@@ -62,3 +62,6 @@ int ContarConfederaciones(int opcion, int* pUefa, int* pConmebol, int* pConcacaf
 	}
 	return retorno;
 }
+
+
+

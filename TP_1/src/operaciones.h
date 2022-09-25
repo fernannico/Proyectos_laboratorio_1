@@ -18,10 +18,10 @@
 #define CAF 6
 
 /// @brief calcula la suma de dos numeros flotantes
-/// @param num1 el primer sumando
-/// @param num2 el segundo sumando
+/// @param numeroUno el primer sumando
+/// @param numeroDos el segundo sumando
 /// @return retorna la suma de ambos sumandos
-float CalcularSuma(float num1, float num2);
+float CalcularSuma(float numeroUno, float numeroDos);
 
 /// @brief calcula el promedio
 /// @param acumulador el numerador, la variable que contiene el grupo de numeros
@@ -45,5 +45,6 @@ float CalcularPorcentaje(float valorInicial, int porcentaje);
 /// @param caf puntero de referencia a la direccion de memoria de la variable "acumulador de jugadores de la CAF"
 /// @return retorna 1 si la carga fue correcta o 0 si no pudo realizar la carga
 int ContarConfederaciones(int opcion, int* uefa, int* conmebol, int* concacaf, int* afc, int* ofc, int* caf);
+
 
 #endif /* OPERACIONES_H_ */
