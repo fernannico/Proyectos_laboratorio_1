@@ -31,11 +31,14 @@ typedef struct{
 void CargarJugadoresHarcodeados(eJugador jugadores[], int size);
 void InicializarEstadoJugadores(eJugador jugadores[], int size);
 int BuscarEspacioLibreJugadores(eJugador jugadores[], int size);
-int ContarJugadoresCargados(int* contadorJugadores, eJugador jugadores[], int size);
-int ValidarJugadorCargado(eJugador jugadores[], int* contadorJugadores, int size);
+//int ContarJugadoresCargados(int* contadorJugadores, eJugador jugadores[], int size);
+//int ValidarJugadorCargado(eJugador jugadores[], int* contadorJugadores, int size);
+
 int CargarPosicion(eJugador jugadores[], int indiceLibre);
-int CalcularInformeSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores);
-float CalcularTotalSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores);
+//int CalcularInformeSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores);
+
+//float CalcularTotalSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores);
+
 int buscarIndicePorIdJugador(eJugador jugadores[], int sizeJugadores, int id);
 void OrdenarJugadoresPorId(eJugador jugadores[], int sizeJugadores);
 

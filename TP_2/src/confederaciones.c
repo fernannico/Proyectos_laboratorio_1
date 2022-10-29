@@ -7,8 +7,8 @@
 #include "nexo.h"
 
 void CargarConfederacionesHarcodeadas(eConfederacion confederaciones[], int size){
-	eConfederacion auxiliar[] = { {100, "CONMEBOL", "SUDAMERICA", 1916, CARGADO}, {101, "UEFA", "EUROPA", 1954, CARGADO}, {102, "AFC", "ASIA", 1954, CARGADO},
-					{103, "CAF", "AFRICA", 1957, CARGADO}, {104, "CONCACAF", "NORTE Y CENTRO AMERICA", 1961, CARGADO}, {105, "OFC", "OCEANIA", 1966, CARGADO}};
+	eConfederacion auxiliar[] = { {100, "CONMEBOL", "SUDAMERICA", 1916, BAJADO}, {101, "UEFA", "EUROPA", 1954, CARGADO}, {102, "AFC", "ASIA", 1954, CARGADO},
+					{103, "CAF", "AFRICA", 1957, CARGADO}, {104, "CONCACAF", "NORTE Y CENTRO AMERICA", 1961, CARGADO}, {105, "OFC", "OCEANIA", 1966, BAJADO}};
 
 	for(int i = 0; i<size; i++){
 		confederaciones[i] = auxiliar[i];
@@ -48,7 +48,7 @@ int ValidarConfederacionCargada(eConfederacion confederaciones[], int* contadorC
 }
 
 ///cambiar que esta C
-int buscarIndicePorIdConfederacion(eConfederacion confederaciones[],int id,int sizeConfed){
+int buscarIndiceConfederacionPorId(eConfederacion confederaciones[],int id,int sizeConfed){
 	int indice = -1;
 
 	if(confederaciones != NULL && sizeConfed > 0){
@@ -61,7 +61,6 @@ int buscarIndicePorIdConfederacion(eConfederacion confederaciones[],int id,int s
 	}
 
 	return indice;
-
 }
 
 
@@ -84,6 +83,20 @@ int MostrarConfederacionPorId(eConfederacion confederaciones[], int sizeConfed, 
 				}
 			}
 			printf("\n============================================================");
+		}
+	}
+	return retorno;
+}
+
+int ValidarConfederacionCargadaPorId(eConfederacion confederaciones[], int sizeConfed, int id){
+	int retorno = -1;
+
+	if(confederaciones != NULL && sizeConfed > 0){
+		for(int c = 0; c<sizeConfed;c++){
+			if(confederaciones[c].isEmpty == CARGADO && confederaciones[c].id == id){
+				retorno = 1;
+				break;
+			}
 		}
 	}
 	return retorno;

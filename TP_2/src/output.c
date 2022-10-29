@@ -87,7 +87,7 @@ void MostrarConfederacionesConJugadores(eConfederacion confederaciones[], eJugad
 int MostrarDetallesJugadores(eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed, int*contadorJugadores){
 	int retorno;
 
-	if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores)==1){
+	if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores, confederaciones, sizeConfed)==1){
 		retorno = 1;
 		printf("\n============================================================================================================");
 		printf("\n| %-3s| %-25s| %-11s| %-13s| %-11s| %-14s| %-18s|", "ID", "NOMBRE", "POSICION", "N° CAMISETA", "SUELDO", "CONFEDERACION", "AÑOS DE CONTRATO");

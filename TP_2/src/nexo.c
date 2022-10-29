@@ -6,6 +6,39 @@
  */
 #include "nexo.h"
 
+int ContarJugadoresCargados(int* contadorJugadores, eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed){
+	int retorno;
+	int contadorJugadoresAux = 0;
+	int confedJugador;
+	retorno = 0;
+
+	if(jugadores != NULL && sizeJugadores > 0 && confederaciones != NULL && sizeConfed > 0 && contadorJugadores != NULL){
+		retorno = 1;
+		for(int i = 0; i<sizeJugadores; i++){
+			confedJugador = buscarIndiceConfederacionPorId(confederaciones, jugadores[i].idConfederacion, sizeConfed);
+			if(jugadores[i].isEmpty == CARGADO && confederaciones[confedJugador].isEmpty == CARGADO){
+				contadorJugadoresAux++;
+			}
+		}
+		*contadorJugadores = contadorJugadoresAux;
+	}
+
+	return retorno;
+}
+
+int ValidarJugadorCargado(eJugador jugadores[], int* contadorJugadores, int sizeJugadores, eConfederacion confederaciones[], int sizeConfed){
+	int retorno = 0;
+
+	if(ContarJugadoresCargados(contadorJugadores, jugadores, confederaciones, sizeJugadores, sizeConfed)==1){
+//	if(ContarJugadoresCargados(contadorJugadores, jugadores, size)==1){
+		if(*contadorJugadores > 0){
+			retorno = 1;
+		}
+	}
+
+	return retorno;
+}
+
 void CargarJugador(eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed, int* codigoAutoIncremental, int* contadorConfederaciones){
 	char seguir;
 
@@ -27,6 +60,8 @@ void CargarJugador(eJugador jugadores[], eConfederacion confederaciones[], int s
 int AltaJugador(eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed, int codigoAutoIncremental, int* contadorConfederaciones){
 	int retorno;
 	int indiceLibre;
+	int reintentos = 2;
+	int banderaConfed = 0;
 
 	retorno = -1;
 	indiceLibre = BuscarEspacioLibreJugadores(jugadores, sizeJugadores);
@@ -43,16 +78,25 @@ int AltaJugador(eJugador jugadores[], eConfederacion confederaciones[], int size
 					if(utn_getShort(&jugadores[indiceLibre].numeroCamiseta, "\nIngrese el numero de camiseta", "\nError", 1, 99, 1)==0){
 						//Cargar id confederacion
 						if(MostrarDetallesConfederaciones(confederaciones, sizeConfed, contadorConfederaciones)==1){
-							if(utn_getNumero(&jugadores[indiceLibre].idConfederacion, "\nIngrese el numero de la confederacion", "\nError", 100, 105, 1)==0){
-								//Cargar salario
-								if(utn_getNumeroFlotante(&jugadores[indiceLibre].salario, "\ningrese el salario del jugador", "\nError", 1, 999999, 1)==0){
-									//Cargar años contrato
-									if(utn_getShort(&jugadores[indiceLibre].aniosContrato, "\nIngrese los anios de contrato [1-5]", "\nError de anios de contrato [de 1 a 5 maximo]", 1, 5, 1)==0){
-										jugadores[indiceLibre].isEmpty = CARGADO;
-										retorno = 1;
+							do{
+								if(utn_getNumero(&jugadores[indiceLibre].idConfederacion, "\nIngrese el numero de la confederacion", "\nError", 100, 105, 1)==0){
+									if(ValidarConfederacionCargadaPorId(confederaciones, sizeConfed, jugadores[indiceLibre].idConfederacion)==1){
+										banderaConfed = 1;
+											//Cargar salario
+											if(utn_getNumeroFlotante(&jugadores[indiceLibre].salario, "\ningrese el salario del jugador", "\nError", 1, 999999, 1)==0){
+												//Cargar años contrato
+												if(utn_getShort(&jugadores[indiceLibre].aniosContrato, "\nIngrese los anios de contrato [1-5]", "\nError de anios de contrato [de 1 a 5 maximo]", 1, 5, 1)==0){
+													jugadores[indiceLibre].isEmpty = CARGADO;
+													retorno = 1;
+												}
+											}
+//										}
+									}else{
+										printf("\nConfederacion no cargada");
 									}
 								}
-							}
+								reintentos--;
+							}while(reintentos >=0 && banderaConfed == 0);
 						}
 					}
 				}
@@ -190,12 +234,12 @@ int OrdenarJugadoresPorConfedYNombre(eJugador jugadores[], eConfederacion confed
 	eJugador jugadorAux;
 
 	if(ValidarConfederacionCargada(confederaciones, contadorConfederaciones, sizeConfed)==1){
-		if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores)==1){
+		if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores, confederaciones, sizeConfed)==1){
 			retorno = 1;
 			for(int i = 0; i<sizeJugadores-1;i++){
 				for(int j = i+1; j<sizeJugadores;j++){
-					confJugadorUno = buscarIndicePorIdConfederacion(confederaciones, jugadores[i].idConfederacion, sizeConfed);
-					confJugadorDos = buscarIndicePorIdConfederacion(confederaciones, jugadores[j].idConfederacion, sizeConfed);
+					confJugadorUno = buscarIndiceConfederacionPorId(confederaciones, jugadores[i].idConfederacion, sizeConfed);
+					confJugadorDos = buscarIndiceConfederacionPorId(confederaciones, jugadores[j].idConfederacion, sizeConfed);
 
 					if(strcmpi(confederaciones[confJugadorUno].nombre,confederaciones[confJugadorDos].nombre)>0){
 						jugadorAux = jugadores[i];
@@ -313,7 +357,7 @@ int ObtenerIndiceConfedMasJugadores(eConfederacion confederaciones[], eJugador j
 	contadorAuxiliar = 0;
 
 	if(confederaciones != NULL && sizeConfed > 0){
-		if(ValidarConfederacionCargada(confederaciones, contadorConfederaciones, sizeConfed)==1 && ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores)==1){
+		if(ValidarConfederacionCargada(confederaciones, contadorConfederaciones, sizeConfed)==1 && ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores, confederaciones, sizeConfed)==1){
 			//funcion
 			for(int i = 0; i < sizeConfed; i++){
 				if(confederaciones[i].isEmpty == CARGADO){
@@ -360,4 +404,135 @@ void MostrarConfederacionesConMasJugadores(eConfederacion confederaciones[], eJu
 		printf("\nFaltan cargar jugadores / confederaciones");
 	}
 	printf("\n===========================================================");
+}
+
+float CalcularTotalSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores, eConfederacion confederaciones[], int sizeConfed){
+	float acumulador;
+	acumulador = 0;
+
+	if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores, confederaciones, sizeConfed)==1){
+		for(int i = 0; jugadores[i].isEmpty == LIBRE || i < sizeJugadores; i++){
+			if(jugadores[i].isEmpty == CARGADO){
+				acumulador += jugadores[i].salario;
+			}
+		}
+	}
+	return acumulador;
+}
+
+int CalcularInformeSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores, eConfederacion confederaciones[], int sizeConfed){
+	int retorno = -1;
+	float acumuladorSalarios;
+	float promedioSalarios;
+	int contadorJugadoresMayorProm;
+	acumuladorSalarios = 0;
+	contadorJugadoresMayorProm = 0;
+
+	acumuladorSalarios = CalcularTotalSalarios(jugadores, sizeJugadores, contadorJugadores, confederaciones, sizeConfed);
+	promedioSalarios = CalcularPromedio(acumuladorSalarios, *contadorJugadores);
+
+	for(int i = 0; i < sizeJugadores;i++){
+		if(jugadores[i].isEmpty == CARGADO && jugadores[i].salario > promedioSalarios){
+			contadorJugadoresMayorProm++;
+		}
+	}
+
+	MostrarInformeSalarios(acumuladorSalarios, promedioSalarios, contadorJugadoresMayorProm);
+
+	return retorno;
+}
+
+
+void InformarPorcentajeJugadoresPorConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores){
+	int banderaConfed;
+	printf("\n===========================================================");
+	printf("\n|%-15s| %-4s|| %-20s| %-11s|", "Confederacion", "Id", "Nombre Jugador", "Id Jugador");
+
+	for(int i = 0; i< sizeConfed; i++){
+		banderaConfed = 0;
+		if(confederaciones[i].isEmpty == 1){
+			printf("\n-----------------------------------------------------------");
+			printf("\n| %-14s| %-4d||%34c|", confederaciones[i].nombre, confederaciones[i].id, ' ');
+			for(int j = 0; j < sizeJugadores; j++){
+				if(jugadores[j].idConfederacion == confederaciones[i].id && jugadores[j].isEmpty == CARGADO){
+					if(banderaConfed == 0){
+						banderaConfed = 1;
+						printf("\n|%50s", "porcentaje: ");
+						printf("%%%.2f |", CalcularPorcentajeJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores, i));
+					}
+				}else{
+					if(ContarJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, i) == 0){
+						printf("\n| %55s |", "porcentaje: sin jugadores");
+						break;
+					}
+				}
+			}
+		}
+	}
+	printf("\n===========================================================");
+}
+
+float CalcularPorcentajeJugadoresConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores, int indice){
+	float porcentaje;
+	int contadorJugadoresConfed;
+
+	if(confederaciones != NULL && sizeConfed > 0 && jugadores != NULL && sizeJugadores > 0){
+		if(confederaciones[indice].isEmpty == CARGADO ){
+			for(int j = 0; jugadores[j].isEmpty == LIBRE || j<sizeJugadores; j++){
+				if(jugadores[j].idConfederacion == confederaciones[indice].id && jugadores[j].isEmpty == CARGADO){
+					contadorJugadoresConfed = ContarJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, indice);
+					porcentaje = (float)(contadorJugadoresConfed*100/ *contadorJugadores);
+				}
+			}
+		}
+	}
+
+	return porcentaje;
+}
+
+void InformarOpciones(eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed, int* contadorJugadores, int* contadorConfederaciones){
+	char seguir;
+	int opcionInforme;
+
+	if(jugadores != NULL && sizeJugadores > 0 && confederaciones != NULL && sizeConfed >0){
+		 if(ValidarConfederacionCargada(confederaciones, contadorConfederaciones, sizeConfed)==1){
+			 if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores, confederaciones, sizeConfed)==1){
+				do {
+					MostrarMenuInformes();
+					if(utn_getNumero(&opcionInforme, "\nOpcion:", "\nError de opcion [1-6]", 1, 7, 1)==0){
+						switch(opcionInforme){
+							case 1:
+								if(OrdenarJugadoresPorConfedYNombre(jugadores, confederaciones, sizeJugadores, sizeConfed, contadorJugadores, contadorConfederaciones)==1){
+									MostrarDetallesJugadores(jugadores, confederaciones, sizeJugadores, sizeConfed, contadorJugadores);
+								}
+								break;
+							case 2:
+								MostrarConfederacionesConJugadores(confederaciones, jugadores, sizeConfed, sizeJugadores);
+								break;
+							case 3:
+								CalcularInformeSalarios(jugadores, sizeJugadores, contadorJugadores, confederaciones, sizeConfed);
+								break;
+							case 4:
+								informarConfederacionMasAnios(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones);
+								break;
+							case 5://Informar porcentaje de jugadores por cada confederación.
+								InformarPorcentajeJugadoresPorConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores);
+								break;
+							case 6://Informar cual es la región con más jugadores y el listado de los mismos.
+								MostrarConfederacionesConMasJugadores(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores);
+								break;
+							default:
+								printf("\nError");
+								break;
+						}
+					}
+					seguir = ValidarSeguirNoSeguir("\nMostrar otro informe? [S|N]", "\nError..");
+				}while(seguir == 'S');
+			 }else{
+				 printf("\nFalta cargar un jugador");
+			 }
+		 }else{
+			 printf("\nFalta cargar una confederacion");
+		 }
+	}
 }

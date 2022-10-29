@@ -26,7 +26,8 @@ typedef struct{
 void CargarConfederacionesHarcodeadas(eConfederacion confederaciones[], int size);
 int ContarConfederacionesCargadas(int* contadorConfederaciones, eConfederacion confederaciones[], int size);
 int ValidarConfederacionCargada(eConfederacion confederaciones[], int* contadorConfederaciones, int size);
-int buscarIndicePorIdConfederacion(eConfederacion confederaciones[],int id,int sizeConfed);
+int buscarIndiceConfederacionPorId(eConfederacion confederaciones[],int id,int sizeConfed);
 int MostrarConfederacionPorId(eConfederacion confederaciones[], int sizeConfed, int* contadorConfederaciones, int id);
+int ValidarConfederacionCargadaPorId(eConfederacion confederaciones[], int sizeConfed, int id);
 
 #endif /* CONFEDERACIONES_H_ */
