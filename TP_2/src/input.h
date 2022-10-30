@@ -65,25 +65,6 @@ int getFloat(float* pResultado);
 /// @return Retorna 0 (EXITO) si se cumplieron las validaciones y asigno el numero y -1 (ERROR) si no
 int utn_getNumeroFlotante(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos);
 
-/*
-/// \brief pide una cadena y valida que no supere el tamanio ingresado
-/// \param cadena variable donde se guardara la cadena ingresada
-/// \param len  el tamanio de la variable donde se guardara la cadena ingresada
-/// \param mensaje mensaje que se mostrara en consola para pedir la cadena
-/// \return retorna 1 si se pudo cargar la cadena y 0 si hubo un error
-int PedirCadena(char cadena[],int len,char mensaje[]);
-*/
-/*
-/// @brief brief Solicita un caracter al usuario, lo valida, verifica y devuelve el resultado
-/// @param pResultado Puntero al resultado alli se dejara el caracter ingresado por el usuario
-/// @param mensaje Es el mensaje a ser mostrado
-/// @param mensajeError Es el mensaje a ser mostrado en caso de error
-/// @param minimo Valor minimo aceptado
-/// @param maximo Valor maximo aceptado
-/// @param reintentos Cantidad de reintentos en el caso de error
-/// @return En caso de exito (0), en caso de error (-1)
-int utn_getCaracter(char* pResultado, char* mensaje,char* mensajeError, char minimo,char maximo,int reintentos);*/
-
 
 /// @brief Verifica si la cadena ingresada son solo letras
 /// @param cadena Cadena de caracteres a ser analizada
