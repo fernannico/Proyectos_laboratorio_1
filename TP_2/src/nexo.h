@@ -20,12 +20,11 @@ void DarDeBajaJugador(eJugador jugadores[], eConfederacion confederaciones[], in
 void ModificarJugador(eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed, int* contadorJugadores, int* contadorConfederaciones, int codigoAutoIncremental);
 int OrdenarJugadoresPorConfedYNombre(eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed, int* contadorJugadores, int* contadorConfederaciones);
 int ObtenerIndiceConfedMasAnios(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones);
-int AcumularAniosConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int indice/*, int* contadorConfederaciones*/);
+int AcumularAniosConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int indice);
 int informarConfederacionMasAnios(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones);
 
-int ContarJugadoresConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int indice/*, int* contadorConfederaciones*/);
+int ContarJugadoresConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int indice);
 int ObtenerIndiceConfedMasJugadores(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores);
-
 
 int ValidarJugadorCargado(eJugador jugadores[], int* contadorJugadores, int sizeJugadores, eConfederacion confederaciones[], int sizeConfed);
 int CalcularInformeSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores, eConfederacion confederaciones[], int sizeConfed);

@@ -34,7 +34,7 @@ int BuscarEspacioLibreConfed(eConfederacion confederaciones[], int sizeConfed){
 	return indiceLibre;
 }
 
-void CargarConfederacionesBajadas(eConfederacion confederaciones[], int sizeConfed, int* contadorConfederaciones){
+void CargarConfederacionesBajadas(eConfederacion confederaciones[], int sizeConfed){
 	int idBajado;
 	int indiceBajado;
 
@@ -61,7 +61,7 @@ void CargarConfederacionesBajadas(eConfederacion confederaciones[], int sizeConf
 	}
 }
 
-int CargarNuevaConfederacion(eConfederacion confederaciones[], int sizeConfed, int idAutoIncrementalConfed, int* contadorConfederaciones){
+int CargarNuevaConfederacion(eConfederacion confederaciones[], int sizeConfed, int idAutoIncrementalConfed){
 	int retorno;
 	int indiceLibre;
 
@@ -263,10 +263,10 @@ void AccederABMConfed(eConfederacion confederaciones[], int sizeConfed, int* con
 					if(utn_getNumero(&subOpcionAltaConfed, "\nOpcion", "\nError", 1, 2, 1)==0){
 						switch (subOpcionAltaConfed) {
 							case 1:
-								CargarConfederacionesBajadas(confederaciones, sizeConfed, contadorConfederaciones);
+								CargarConfederacionesBajadas(confederaciones, sizeConfed);
 								break;
 							case 2:
-								if(CargarNuevaConfederacion(confederaciones, sizeConfed, idAutoIncrementalConfed, contadorConfederaciones)==1){
+								if(CargarNuevaConfederacion(confederaciones, sizeConfed, idAutoIncrementalConfed)==1){
 									printf("\nConfederacion cargada con exito");
 								}else{
 									printf("\nConfederacion cargada sin exito");

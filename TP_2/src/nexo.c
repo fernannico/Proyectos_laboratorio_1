@@ -496,7 +496,7 @@ void InformarOpciones(eJugador jugadores[], eConfederacion confederaciones[], in
 								InformarPorcentajeJugadoresPorConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores);
 								break;
 							case 6://Informar cual es la región con más jugadores y el listado de los mismos.
-								MostrarConfederacionesConMasJugadores(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores);
+								MostrarRegionConMasJugadores(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores);
 								break;
 							default:
 								printf("\nError");

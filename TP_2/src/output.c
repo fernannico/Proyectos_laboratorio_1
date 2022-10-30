@@ -159,7 +159,7 @@ int MostrarDetallesJugadores(eJugador jugadores[], eConfederacion confederacione
 	return retorno;
 }
 
-void MostrarConfederacionesConMasJugadores(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores){
+void MostrarRegionConMasJugadores(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores){
 	int indice;
 	int maximoContador;
 	int contadorAux;
@@ -169,14 +169,14 @@ void MostrarConfederacionesConMasJugadores(eConfederacion confederaciones[], eJu
 	if((indice = ObtenerIndiceConfedMasJugadores(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores)) != -1){
 		maximoContador = ContarJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, indice);
 		printf("\n===========================================================");
-		printf("\n|%-15s| %-4s|| %-20s| %-11s|", "Confederacion", "Id", "Nombre Jugador", "Id Jugador");
+		printf("\n|%-15s| %-4s|| %-20s| %-11s|", "Region Confed", "Id", "Nombre Jugador", "Id Jugador");
 
 		for(int i = 0; i< sizeConfed; i++){
 			if(confederaciones[i].isEmpty == 1){
 				contadorAux = ContarJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, i);
 				if(contadorAux == maximoContador){
 					printf("\n-----------------------------------------------------------");
-					printf("\n| %-14s| %-4d||%34c|", confederaciones[i].nombre, confederaciones[i].id, ' ');
+					printf("\n| %-14s| %-4d||%34c|", confederaciones[i].region, confederaciones[i].id, ' ');
 					for(int j = 0; j < sizeJugadores; j++){
 						if(jugadores[j].idConfederacion == confederaciones[i].id && jugadores[j].isEmpty == CARGADO){
 							printf("\n|%43s | %5d      |", jugadores[j].nombre, jugadores[j].id);
