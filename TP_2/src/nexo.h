@@ -25,7 +25,6 @@ int informarConfederacionMasAnios(eConfederacion confederaciones[], eJugador jug
 
 int ContarJugadoresConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int indice/*, int* contadorConfederaciones*/);
 int ObtenerIndiceConfedMasJugadores(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores);
-void MostrarConfederacionesConMasJugadores(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores);
 
 
 int ValidarJugadorCargado(eJugador jugadores[], int* contadorJugadores, int sizeJugadores, eConfederacion confederaciones[], int sizeConfed);

@@ -7,8 +7,8 @@
 #include "nexo.h"
 
 void CargarJugadoresHarcodeados(eJugador jugadores[], int size){
-	eJugador auxiliar[] = { {1, "Lionel Messi", "Delantero", 10, 104, 200000, 5, CARGADO}, {2, "Enzo Copetti", "Mediocampo", 9, 103, 86000, 5, CARGADO},
-							{3, "Palermo", "Delantero", 9, 103, 75000, 5, CARGADO}, {4, "Neymar", "Delantero", 10, 104, 200000, 5, CARGADO},
+	eJugador auxiliar[] = { {1, "Lionel Messi", "Delantero", 10, 104, 200000, 4, CARGADO}, {2, "Enzo Copetti", "Mediocampo", 9, 103, 86000, 5, CARGADO},
+							{3, "Palermo", "Delantero", 9, 103, 75000, 4, CARGADO}, {4, "Neymar", "Delantero", 10, 104, 200000, 5, CARGADO},
 							{5, "cristiano ronaldo", "Delantero", 7, 101, 200000, 5, CARGADO}, {6, "tevez", "Delantero", 9, 101, 100000, 5, CARGADO}};
 
 	for(int i = 0; i<size; i++){
@@ -37,28 +37,6 @@ int BuscarEspacioLibreJugadores(eJugador jugadores[], int size){
 }
 
 ///--------------------------------------------------------------
-
-//int ContarJugadoresCargados(int* contadorJugadores, eJugador jugadores[], eConfederacion confederaciones[], int sizeJugadores, int sizeConfed){
-//	int retorno;
-//	int contadorJugadoresAux = 0;
-//	int confedJugador;
-//	retorno = 0;
-//
-//	if(jugadores != NULL && sizeJugadores > 0 && confederaciones != NULL && sizeConfed > 0 && contadorJugadores != NULL){
-//		retorno = 1;
-//		for(int i = 0; i<sizeJugadores; i++){
-//			confedJugador = buscarIndiceConfederacionPorId(confederaciones, jugadores[i].idConfederacion, sizeConfed);
-//			if(jugadores[i].isEmpty == CARGADO && confederaciones[confedJugador].isEmpty == CARGADO){
-//				contadorJugadoresAux++;
-//			}
-//		}
-//		*contadorJugadores = contadorJugadoresAux;
-//	}
-//
-//	return retorno;
-//}
-
-
 
 int CargarPosicion(eJugador jugadores[], int indiceLibre){
 	int posicion;
@@ -102,8 +80,6 @@ void OrdenarJugadoresPorId(eJugador jugadores[], int sizeJugadores){
 		}
 	}
 }
-
-
 
 
 ///--------------------------------------------------------------

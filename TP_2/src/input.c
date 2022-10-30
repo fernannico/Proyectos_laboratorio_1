@@ -339,7 +339,12 @@ char ValidarSeguirNoSeguir(char * mensaje, char * mensajeError){
 
 float CalcularPromedio(float acumulador, int contador){
 	float promedio;
-	promedio = (float)acumulador/ contador;
+
+	if(contador != 0){
+		promedio = (float)acumulador/ contador;
+	}else{
+		printf("\nError, no se puede dividir entre 0");
+	}
 
 	return promedio;
 }

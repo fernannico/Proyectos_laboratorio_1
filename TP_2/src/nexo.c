@@ -30,7 +30,6 @@ int ValidarJugadorCargado(eJugador jugadores[], int* contadorJugadores, int size
 	int retorno = 0;
 
 	if(ContarJugadoresCargados(contadorJugadores, jugadores, confederaciones, sizeJugadores, sizeConfed)==1){
-//	if(ContarJugadoresCargados(contadorJugadores, jugadores, size)==1){
 		if(*contadorJugadores > 0){
 			retorno = 1;
 		}
@@ -315,12 +314,21 @@ int ObtenerIndiceConfedMasAnios(eConfederacion confederaciones[], eJugador jugad
 int informarConfederacionMasAnios(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones){
 	int retorno = -1;
 	int indice;
+	int maximoAcumulador;
+	int acumuladorAux;
 
 	indice = ObtenerIndiceConfedMasAnios(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones);
+
 	if(indice != -1){
-		if(MostrarConfederacionPorId(confederaciones, sizeConfed, contadorConfederaciones, confederaciones[indice].id)==1){
-			printf("\n| años: %d |"
-					"\n===========", AcumularAniosConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, indice));
+		maximoAcumulador = AcumularAniosConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, indice);
+		for(int i = 0; i < sizeConfed; i++){
+			acumuladorAux = AcumularAniosConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, i);
+			if(maximoAcumulador == acumuladorAux){
+				if(MostrarConfederacionPorId(confederaciones, sizeConfed, contadorConfederaciones, confederaciones[i].id)==1){
+					printf("\n| años: %d |"
+							"\n===========", AcumularAniosConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, indice));
+				}
+			}
 		}
 	}else{
 		printf("\nNo hay confederaciones cargadas");
@@ -328,8 +336,6 @@ int informarConfederacionMasAnios(eConfederacion confederaciones[], eJugador jug
 
 	return retorno;
 }
-
-///ACA VAN LAS FUNCIONES DEL PUNTO 4.5
 
 int ContarJugadoresConfed(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int indice){
 	int contador;
@@ -374,45 +380,15 @@ int ObtenerIndiceConfedMasJugadores(eConfederacion confederaciones[], eJugador j
 	return indice;
 }
 
-void MostrarConfederacionesConMasJugadores(eConfederacion confederaciones[], eJugador jugadores[], int sizeConfed, int sizeJugadores, int* contadorConfederaciones, int* contadorJugadores){
-	int indice;
-	int maximoContador;
-	int contadorAux;
-
-	contadorAux = 0;
-
-	if((indice = ObtenerIndiceConfedMasJugadores(confederaciones, jugadores, sizeConfed, sizeJugadores, contadorConfederaciones, contadorJugadores)) != -1){
-		maximoContador = ContarJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, indice);
-		printf("\n===========================================================");
-		printf("\n|%-15s| %-4s|| %-20s| %-11s|", "Confederacion", "Id", "Nombre Jugador", "Id Jugador");
-
-		for(int i = 0; i< sizeConfed; i++){
-			if(confederaciones[i].isEmpty == 1){
-				contadorAux = ContarJugadoresConfed(confederaciones, jugadores, sizeConfed, sizeJugadores, i);
-				if(contadorAux == maximoContador){
-					printf("\n-----------------------------------------------------------");
-					printf("\n| %-14s| %-4d||%34c|", confederaciones[i].nombre, confederaciones[i].id, ' ');
-					for(int j = 0; j < sizeJugadores; j++){
-						if(jugadores[j].idConfederacion == confederaciones[i].id && jugadores[j].isEmpty == CARGADO){
-							printf("\n|%43s | %5d      |", jugadores[j].nombre, jugadores[j].id);
-						}
-					}
-				}
-			}
-		}
-	}else{
-		printf("\nFaltan cargar jugadores / confederaciones");
-	}
-	printf("\n===========================================================");
-}
 
 float CalcularTotalSalarios(eJugador jugadores[], int sizeJugadores, int* contadorJugadores, eConfederacion confederaciones[], int sizeConfed){
 	float acumulador;
-	acumulador = 0;
+	acumulador = -1;
 
 	if(ValidarJugadorCargado(jugadores, contadorJugadores, sizeJugadores, confederaciones, sizeConfed)==1){
+		acumulador = 0;
 		for(int i = 0; jugadores[i].isEmpty == LIBRE || i < sizeJugadores; i++){
-			if(jugadores[i].isEmpty == CARGADO){
+			if(jugadores[i].isEmpty == CARGADO && ValidarConfederacionCargadaPorId(confederaciones, sizeConfed, jugadores[i].idConfederacion)==1){
 				acumulador += jugadores[i].salario;
 			}
 		}
@@ -428,11 +404,12 @@ int CalcularInformeSalarios(eJugador jugadores[], int sizeJugadores, int* contad
 	acumuladorSalarios = 0;
 	contadorJugadoresMayorProm = 0;
 
-	acumuladorSalarios = CalcularTotalSalarios(jugadores, sizeJugadores, contadorJugadores, confederaciones, sizeConfed);
-	promedioSalarios = CalcularPromedio(acumuladorSalarios, *contadorJugadores);
+	if((acumuladorSalarios = CalcularTotalSalarios(jugadores, sizeJugadores, contadorJugadores, confederaciones, sizeConfed)) > -1){
+		promedioSalarios = CalcularPromedio(acumuladorSalarios, *contadorJugadores);
+	}
 
 	for(int i = 0; i < sizeJugadores;i++){
-		if(jugadores[i].isEmpty == CARGADO && jugadores[i].salario > promedioSalarios){
+		if(jugadores[i].isEmpty == CARGADO && jugadores[i].salario > promedioSalarios && ValidarConfederacionCargadaPorId(confederaciones, sizeConfed, jugadores[i].idConfederacion)==1){
 			contadorJugadoresMayorProm++;
 		}
 	}
