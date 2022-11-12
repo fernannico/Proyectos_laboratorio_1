@@ -42,15 +42,21 @@ int jug_getSIdSeleccion(Jugador* this,int* idSeleccion);
 /// propias
 
 int jug_getOnePlayer(Jugador* unJugador, int* id, char* nombreCompleto, int* edad, char* posicion, char* nacionalidad, int* idSeleccion);
-
-///actualizar a mejorada
+int jug_setOnePlayer(Jugador* unJugador, int id, char* nombreCompleto, int edad, char* posicion, char* nacionalidad, int idSeleccion);
 int jug_printOnePlayer(Jugador* unJugador);
+
+int jug_modificarNombre(Jugador* this);
+int jug_modificarEdad(Jugador* this);
+int jug_modificarNacionalidad(Jugador* this);
+int jug_modificarPosicion(Jugador* this);
 
 int jug_CompareByName(void* unJugador,void* otroJugador);
 int jug_CompareByNationality(void* unJugador,void* otroJugador);
 int jug_CompareByAge(void* unJugador,void* otroJugador);
 int jug_BuscarIndiceJugadorPorId(LinkedList* pArrayListJugador, int id);
 
+void jug_actualizarIdModoTexto(int id);
+int jug_AsignarIdDesdeTexto(char* path);
 
 ///la uso--> printfOnePlayer??? falta validar seleccion
 int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id);

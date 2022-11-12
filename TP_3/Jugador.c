@@ -174,6 +174,17 @@ int jug_getOnePlayer(Jugador* unJugador, int* id, char* nombreCompleto, int* eda
 	return retorno;
 }
 
+int jug_setOnePlayer(Jugador* unJugador, int id, char* nombreCompleto, int edad, char* posicion, char* nacionalidad, int idSeleccion){
+	int retorno = -1;
+
+	if( jug_setId(unJugador, id)==0 && jug_setNombreCompleto(unJugador, nombreCompleto)==0 && jug_setEdad(unJugador, edad)==0 &&
+		jug_setPosicion(unJugador, posicion)==0 && jug_setNacionalidad(unJugador, nacionalidad)==0 && jug_setIdSeleccion(unJugador, idSeleccion)==0){
+		retorno = 1;
+	}
+
+	return retorno;
+}
+
 int jug_printOnePlayer(Jugador* unJugador){
 	int retorno = -1;
 	int id;
@@ -187,11 +198,11 @@ int jug_printOnePlayer(Jugador* unJugador){
 	char pais[30];
 	int cantidadSelecciones;
 
-	LinkedList* pArrayListSeleccion;
-	pArrayListSeleccion = ll_newLinkedList();
-	controller_cargarSeleccionesDesdeTexto("selecciones.csv", pArrayListSeleccion);
+	LinkedList* pArrayListSeleccionAux;
+	pArrayListSeleccionAux = ll_newLinkedList();
+	controller_cargarSeleccionesDesdeTexto("selecciones.csv", pArrayListSeleccionAux);
 
-	cantidadSelecciones = ll_len(pArrayListSeleccion);
+	cantidadSelecciones = ll_len(pArrayListSeleccionAux);
 
 	if(jug_getOnePlayer(unJugador, &id, nombreCompleto, &edad, posicion, nacionalidad, &idSeleccion)==1){
 		retorno = 1;
@@ -199,7 +210,7 @@ int jug_printOnePlayer(Jugador* unJugador){
 			printf("\n%-4d %-25s %-6d %-20s %-17s %-24s", id, nombreCompleto, edad, posicion, nacionalidad, "No convocado");
 		}
 		for(int i = 0; i < cantidadSelecciones; i++){
-			seleccionAux = (Seleccion*)ll_get(pArrayListSeleccion, i);
+			seleccionAux = (Seleccion*)ll_get(pArrayListSeleccionAux, i);
 			if(selec_getId(seleccionAux, &idSelecAux)==0){
 				if(idSelecAux == idSeleccion){
 					if(selec_getPais(seleccionAux, pais)==0){
@@ -213,6 +224,111 @@ int jug_printOnePlayer(Jugador* unJugador){
 	return retorno;
 }
 
+
+int jug_modificarNombre(Jugador* this){
+	int retorno = -1;
+	char nombreActual[100];
+	char nombreNuevo[100];
+	char confirmar;
+
+	if(this != NULL){
+		jug_getNombreCompleto(this, nombreActual);
+
+		if(utn_getNombre(nombreNuevo, 100, "\nIngrese el nuevo nombre del jugador", "\nError", 1)==0){
+			ModularNombre(nombreNuevo);
+
+			printf("\nModificando el nombre del jugador de %s a %s...", nombreActual, nombreNuevo);
+			confirmar = ValidarSeguirNoSeguir("\nModificar el nombre del jugador? [S|N]", "\nError");
+			if(confirmar == 'S'){
+				jug_setNombreCompleto(this, nombreNuevo);
+				retorno = 1;
+			}
+		}else{
+			printf("\nModificacion interrumpida");
+		}
+	}
+
+	return retorno;
+}
+
+int jug_modificarEdad(Jugador* this){
+	int retorno = -1;
+	int edadActual;
+	int edadNueva;
+	char confirmar;
+
+	if(this != NULL){
+		jug_getEdad(this, &edadActual);
+
+		if(utn_getNumero(&edadNueva, "\nIngrese la nueva edad del jugador [16-60]", "\nError", 16, 60, 1)==0){
+
+			printf("\nModificando la edad del jugador de %d a %d años", edadActual, edadNueva);
+			confirmar = ValidarSeguirNoSeguir("\nModificar la edad del jugador? [S|N]", "\nError");
+			if(confirmar == 'S'){
+				jug_setEdad(this, edadNueva);
+				retorno = 1;
+			}
+		}else{
+			printf("\nModificacion interrumpida");
+		}
+	}
+
+
+	return retorno;
+}
+
+///podemos hacer una matriz de 11 posiciones harcodeados y que ingrese el numero--> char posicion[11][30]
+int jug_modificarPosicion(Jugador* this){
+	int retorno = -1;
+	char posicionActual[30];
+	char posicionNueva[30];
+	char confirmar;
+
+	if(this != NULL){
+		jug_getPosicion(this, posicionActual);
+
+		printf("\nIngrese la nueva posicion del jugador");
+		fflush(stdin);
+		scanf("%[^\n]s", posicionNueva);
+//		utn_getNumero(&posicionNueva, "\nIngrese la nueva posicion del jugador", "\nError", 16, 60, 1);
+
+		printf("\nModificando la posicion del jugador de %s a %s", posicionActual, posicionNueva);
+		confirmar = ValidarSeguirNoSeguir("\nModificar la posicion del jugador? [S|N]", "\nError");
+		if(confirmar == 'S'){
+			jug_setPosicion(this, posicionNueva);
+			retorno = 1;
+		}
+	}
+
+	return retorno;
+}
+
+///podemos hacer una matriz de 32 paises harcodeados y que ingrese el numero--> char nacionalidad[32][30]
+int jug_modificarNacionalidad(Jugador* this){
+	int retorno = -1;
+	char nacionalidadActual[30];
+	char nacionalidadNueva[30];
+	char confirmar;
+
+	if(this != NULL){
+		jug_getNacionalidad(this, nacionalidadActual);
+
+//		utn_getNumero(&nacionalidadNueva, "\nIngrese la nueva edad del jugador [16-60]", "\nError", 16, 60, 1);
+		printf("\nIngrese la nueva nacionalidad del jugador");
+		fflush(stdin);
+		scanf("%[^\n]s", nacionalidadNueva);
+
+		printf("\nModificando la nacionalidad del jugador de %s a %s", nacionalidadActual, nacionalidadNueva);
+		confirmar = ValidarSeguirNoSeguir("\nModificar la nacionalidad del jugador? [S|N]", "\nError");
+		if(confirmar == 'S'){
+			jug_setNacionalidad(this, nacionalidadNueva);
+			retorno = 1;
+		}
+	}
+
+
+	return retorno;
+}
 
 int jug_CompareByName(void* unJugador,void* otroJugador){
 	Jugador* jugadorUno;
@@ -280,6 +396,7 @@ int jug_BuscarIndiceJugadorPorId(LinkedList* pArrayListJugador, int id){
 
 	for(int i = 0; i<cantidad; i++){
 		unJugador = ll_get(pArrayListJugador, i);
+
 		if(jug_getId(unJugador, &idAux)==0 && idAux == id){
 			indice = ll_indexOf(pArrayListJugador, unJugador);
 			///recien agregado
@@ -290,6 +407,7 @@ int jug_BuscarIndiceJugadorPorId(LinkedList* pArrayListJugador, int id){
 	return indice;
 }
 
+/*
 int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id){
 	int retorno = 0;
 	int indice = -1;
@@ -299,13 +417,44 @@ int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id){
 	indice = jug_BuscarIndiceJugadorPorId(pArrayListJugador, id);
 	cantidad = ll_len(pArrayListJugador);
 
-	for(int i=0;i<cantidad;i++){
-		jugadorAux = (Jugador*)ll_get(pArrayListJugador, indice);
-		jug_printOnePlayer(jugadorAux);
-		retorno = 1;
-		break;
+	if(indice != -1){
+		for(int i=0;i<cantidad;i++){
+			jugadorAux = (Jugador*)ll_get(pArrayListJugador, indice);
+			jug_printOnePlayer(jugadorAux);
+			retorno = 1;
+			break;
+		}
 	}
 
 	return retorno;
 }
+*/
+void jug_actualizarIdModoTexto(int id){
+	FILE* pArchivo;
 
+	pArchivo = fopen("idJugador.csv", "w");
+
+	fprintf(pArchivo, "%d\n", id);
+
+	fclose(pArchivo);
+}
+
+int jug_AsignarIdDesdeTexto(char* path){
+	FILE* pArchivo = NULL;
+	char idTexto[5];
+	int id;
+
+	pArchivo = fopen(path, "r");
+
+	if(pArchivo!=NULL){
+		while(feof(pArchivo)==0){
+			fscanf(pArchivo, "%[^\n]\n", idTexto);
+		}
+	}
+
+	id = atoi(idTexto) +1;
+
+	fclose(pArchivo);
+
+	return id;
+}

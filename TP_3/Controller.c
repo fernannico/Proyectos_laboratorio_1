@@ -37,30 +37,138 @@ int controller_cargarJugadoresDesdeBinario(char* path , LinkedList* pArrayListJu
 }
 
 
-int controller_agregarJugador(LinkedList* pArrayListJugador)
-{
-    return 1;
-}
+int controller_agregarJugador(LinkedList* pArrayListJugador){
+	int retorno = -1;
+	int id;
+	char nombreCompleto[100];
+	int edad;
+	char posicion[30];
+	char nacionalidad[30];
+	Jugador* unJugador = NULL;
 
+	LinkedList* pArrayListSeleccionAux;
+	pArrayListSeleccionAux = ll_newLinkedList();
+	controller_cargarSeleccionesDesdeTexto("selecciones.csv", pArrayListSeleccionAux);
+
+	if(pArrayListJugador != NULL){
+		id= jug_AsignarIdDesdeTexto("idJugador.csv");
+		if(utn_getNombre(nombreCompleto, 100, "\nIngrese el nombre del jugador: ", "\nError", 1)==0){
+			ModularNombre(nombreCompleto);
+			if(utn_getNumero(&edad, "\nIngrese la edad del jugador: [15-55]", "\nError", 15, 55, 1)==0){
+				if(utn_getNombre(posicion, 30, "\nIngrese la posicion del jugador: ", "\nError", 1)==0){
+					if(utn_getNombre(nacionalidad, 30, "\nIngrese la nacionalidad del jugador: ", "\nError", 1)==0)
+					{
+						unJugador = jug_new();
+						if(jug_setOnePlayer(unJugador, id, nombreCompleto, edad, posicion, nacionalidad, 0)==1){
+							if(unJugador != NULL){
+								ll_add(pArrayListJugador, unJugador);
+								jug_actualizarIdModoTexto(id);
+								retorno = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ll_deleteLinkedList(pArrayListSeleccionAux);
+	free(unJugador);
+    return retorno;
+}
 
 int controller_editarJugador(LinkedList* pArrayListJugador)
 {
-    return 1;
-}
+	int retorno = -1;
+	int idMaximo;
+	int idJugAux;
+	int indiceJugAux;
+//	int validaExistencia = 0;
+//	int intentos = 2;
+	int opcion;
+//	char confirmar;
+	Jugador* unJugador = NULL;
 
+	idMaximo = jug_AsignarIdDesdeTexto("idJugador.csv");
+
+	if(pArrayListJugador != NULL /*&& cantidadJugadores > 0*/){
+//		do{
+			controller_listarJugadores(pArrayListJugador);
+			if(utn_getNumero(&idJugAux, "\nIngrese el ID del jugador a modificar: ", "\nError", 1, idMaximo, 1)==0){
+				indiceJugAux = jug_BuscarIndiceJugadorPorId(pArrayListJugador, idJugAux);
+				if(indiceJugAux != -1){
+//					validaExistencia = 1;
+//					intentos = 0;
+					unJugador = (Jugador*)ll_get(pArrayListJugador, indiceJugAux);
+					if(unJugador!=NULL){
+						jug_printOnePlayer(unJugador);
+						printf("\n\nModificar:"
+								"\n1- Nombre"
+								"\n2- Edad"
+								"\n3- Posicion"
+								"\n4- Nacionalidad");
+						utn_getNumero(&opcion, "\nOpcion: ", "\nError", 1, 4, 1);
+						switch (opcion) {
+							case 1:
+								if(jug_modificarNombre(unJugador)==1){
+									printf("\nNombre modificado");
+								}else{
+									printf("\nModificacion no realizada");
+								}
+
+								break;
+							case 2:
+								if(jug_modificarEdad(unJugador)==1){
+									printf("\nEdad modificada");
+								}else{
+									printf("\nModificacion no realizada");
+								}
+								break;
+							case 3:
+								if(jug_modificarPosicion(unJugador)==1){
+									printf("\nPosicion modificada");
+								}else{
+									printf("\nModificacion no realizada");
+								}
+								break;
+							case 4:
+								if(jug_modificarNacionalidad(unJugador)==1){
+									printf("\nNacionalidad modificada");
+								}else{
+									printf("\nModificacion no realizada");
+								}
+								break;
+							default:
+								break;
+						}
+						///preguntar si quiere modificarle algo mas a este jugador
+	//					confirmar = ValidarSeguirNoSeguir("\nModificar este jugador? [S|N]", "\nError");
+					}
+				}else{
+					printf("\nEl jugador no existe");
+//					intentos--;
+				}
+			}
+//		}while(/*validaExistencia == 0 ||*/ intentos >0);
+	}
+
+	free(unJugador);
+
+    return retorno;
+}
 
 int controller_removerJugador(LinkedList* pArrayListJugador){
 	int retorno = -1;
 	int id;
 	int indice;
-	int cantidad;
+	int idMaximo;
 	char seguir;
 	Jugador* unJugador;
 
-	cantidad = ll_len(pArrayListJugador);
+	idMaximo = jug_AsignarIdDesdeTexto("idJugador.csv");
 
 	if(controller_listarJugadores(pArrayListJugador)==1){
-		if(utn_getNumero(&id, "\nIngrese el id del jugador a dar de baja: ", "\nError", 1, cantidad, 1)==0){
+		if(utn_getNumero(&id, "\nIngrese el id del jugador a dar de baja: ", "\nError", 1, idMaximo, 1)==0){
 			indice = jug_BuscarIndiceJugadorPorId(pArrayListJugador, id);
 			if(indice != -1){
 				unJugador = ll_get(pArrayListJugador, indice);
@@ -77,14 +185,16 @@ int controller_removerJugador(LinkedList* pArrayListJugador){
 						retorno = 1;
 					}else{
 						printf("\nNo se borrara al jugador");
-						retorno = 0;
 					}
-
 				}
-
+			}else{
+				printf("\nEl jugador no existe");
 			}
-
+		}else{
+			printf("\nInterrumpiendo opcion");
 		}
+	}else{
+		printf("\nno entra");
 	}
     return retorno;
 }
@@ -203,7 +313,6 @@ int controller_guardarJugadoresModoBinario(char* path , LinkedList* pArrayListJu
 	int cantidadSelec;
 	int idSelecJugAux;
 	int idSelecAux;
-//	int opcion;
 	char confederacionAux[30];
 	char confederacionOpcion[30];
 	FILE* pFileBin;
@@ -216,35 +325,37 @@ int controller_guardarJugadoresModoBinario(char* path , LinkedList* pArrayListJu
 	controller_cargarSeleccionesDesdeTexto("selecciones.csv", pArrayListSeleccionAux);
 
 	if(path != NULL && pArrayListJugador != NULL && pArrayListSeleccionAux != NULL){
-		selec_seleccionarConfederacion(confederacionOpcion);
+		if(selec_seleccionarConfederacion(confederacionOpcion)==1){
+			///habria que validar si esa confederacion tiene convocados y recien ahi crear el archivo
+			pFileBin = fopen(path, "wb");
+			cantidadJugad = ll_len(pArrayListJugador);
+			cantidadSelec = ll_len(pArrayListSeleccionAux);
 
-		///habria que validar si esa confederacion tiene convocados y recien ahi crear el archivo
-		pFileBin = fopen(path, "wb");
-		cantidadJugad = ll_len(pArrayListJugador);
-		cantidadSelec = ll_len(pArrayListSeleccionAux);
-
-		for(int i = 0; i<cantidadJugad; i++){
-			jugadorAux = (Jugador*)ll_get(pArrayListJugador, i);
-			if(jug_getSIdSeleccion(jugadorAux, &idSelecJugAux)==0){
-				if(idSelecJugAux != 0){
-					for(int j = 0; j<cantidadSelec; j++){
-						seleccionAux = (Seleccion*)ll_get(pArrayListSeleccionAux, j);
-						if(selec_getId(seleccionAux, &idSelecAux)==0 && selec_getConfederacion(seleccionAux, confederacionAux)==0){
-							if(strcmp(confederacionAux, confederacionOpcion)==0 && idSelecAux == idSelecJugAux){
-								fwrite(jugadorAux, sizeof(Jugador), 1, pFileBin);
-								retorno = 1;
+			for(int i = 0; i<cantidadJugad; i++){
+				jugadorAux = (Jugador*)ll_get(pArrayListJugador, i);
+				if(jug_getSIdSeleccion(jugadorAux, &idSelecJugAux)==0){
+					if(idSelecJugAux != 0){
+						for(int j = 0; j<cantidadSelec; j++){
+							seleccionAux = (Seleccion*)ll_get(pArrayListSeleccionAux, j);
+							if(selec_getId(seleccionAux, &idSelecAux)==0 && selec_getConfederacion(seleccionAux, confederacionAux)==0){
+								if(strcmp(confederacionAux, confederacionOpcion)==0 && idSelecAux == idSelecJugAux){
+									fwrite(jugadorAux, sizeof(Jugador), 1, pFileBin);
+									retorno = 1;
+								}
 							}
 						}
 					}
 				}
 			}
-		}
 
-		fclose(pFileBin);
-		ll_clear(pArrayListSeleccionAux);
-		ll_deleteLinkedList(pArrayListSeleccionAux);
-		free(jugadorAux);
-		free(seleccionAux);
+			fclose(pFileBin);
+			ll_clear(pArrayListSeleccionAux);
+			ll_deleteLinkedList(pArrayListSeleccionAux);
+			free(jugadorAux);
+			free(seleccionAux);
+		}else{
+			printf("\nOpcion interrumpida...");
+		}
 	}
 
     return retorno;
@@ -314,27 +425,32 @@ int controller_Convocar(LinkedList* pArrayListJugador, LinkedList* pArrayListSel
     int indice;
     int id;
     int seleccion;
-    int cantidad;
+    int idMaximo;
     int cantidadSelec;
 	Jugador* unJugador;
 
-	cantidad = ll_len(pArrayListJugador);
+	idMaximo = jug_AsignarIdDesdeTexto("idJugador.csv");
+//	cantidad = ll_len(pArrayListJugador);
 	cantidadSelec = ll_len(pArrayListSelecc);
 
 	if(controller_listarJugadores(pArrayListJugador)==1){
-		if(utn_getNumero(&id, "\nIngrese Id del jugador a convocar: ", "\nError", 1, cantidad, 1)==0){
+		if(utn_getNumero(&id, "\nIngrese Id del jugador a convocar: ", "\nError", 1, idMaximo, 1)==0){
 			indice = jug_BuscarIndiceJugadorPorId(pArrayListJugador, id);
-			unJugador = (Jugador*)ll_get(pArrayListJugador, indice);
-			printf("\nJugador a convocar:");
-			if(jug_printOnePlayer(unJugador)==1){
-//				printf("\n");
-				controller_listarSelecciones(pArrayListSelecc);
-				if(utn_getNumero(&seleccion, "\nSeleccion a la que convocar:", "\nError", 1, cantidadSelec, 1)==0){
-					if(jug_setIdSeleccion(unJugador, seleccion)==0){
-						jug_printOnePlayer(unJugador);
-						retorno = 1;
+			if(indice != -1){
+				unJugador = (Jugador*)ll_get(pArrayListJugador, indice);
+				printf("\nJugador a convocar:");
+				if(jug_printOnePlayer(unJugador)==1){
+	//				printf("\n");
+					controller_listarSelecciones(pArrayListSelecc);
+					if(utn_getNumero(&seleccion, "\nSeleccion a la que convocar:", "\nError", 1, cantidadSelec, 1)==0){
+						if(jug_setIdSeleccion(unJugador, seleccion)==0){
+							jug_printOnePlayer(unJugador);
+							retorno = 1;
+						}
 					}
 				}
+			}else{
+				printf("\nEl jugador no existe");
 			}
 		}
 	}
@@ -349,6 +465,9 @@ int controller_listarJugadoresConvocados(LinkedList* pArrayListJugador){
 	Jugador* jugadorAux;
 
 	cantidadJugadores = ll_len(pArrayListJugador);
+
+	printf("\n%-4s %-25s %-6s %-20s %-17s %-11s","id","nombre Completo", "edad", "posicion", "nacionalidad", "Selecion");
+	printf("\n-------------------------------------------------------------------------------------------");
 
 	for(int i = 0; i < cantidadJugadores; i++){
 		jugadorAux = (Jugador*)ll_get(pArrayListJugador, i);

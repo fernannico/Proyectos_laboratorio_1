@@ -123,6 +123,7 @@ int selec_seleccionarConfederacion(char* confederacionOpcion){
 								"\n3- CONCACAF"
 								"\n4- CONMEBOL"
 								"\n5- UEFA", "\nError", 1, 5, 1)==0){
+		retorno = 1;
 		switch (opcion) {
 			case 1:
 				strcpy(confederacionOpcion,"AFC");
