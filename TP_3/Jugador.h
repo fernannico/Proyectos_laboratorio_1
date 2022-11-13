@@ -23,7 +23,7 @@ void jug_delete(Jugador* this);
 int jug_setId(Jugador* this,int id);
 int jug_getId(Jugador* this,int* id);
 
-int jug_setNombreCompleto(Jugador* this,char* nombreCompleto);
+int jug_setNombreCompleto(Jugador* this,char* nombre);
 int jug_getNombreCompleto(Jugador* this,char* nombreCompleto);
 
 int jug_setPosicion(Jugador* this,char* posicion);

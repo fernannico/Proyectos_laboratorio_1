@@ -1,15 +1,14 @@
 
 #include "Controller.h"
 
-//int controller_editarJugador(LinkedList* pArrayListJugador);
-
 
 int main()
 {
 	setbuf(stdout,NULL);
     int option;
-    char seguir;
+//    char seguir;
     int banderaOpcionOcho = 0;
+    int banderaOpcionUno = 0;
 
     LinkedList* listaJugadores = ll_newLinkedList();
     LinkedList* listaSelecciones = ll_newLinkedList();
@@ -32,11 +31,17 @@ int main()
         switch(option)
         {
             case 1:
-                puts("\nCargando jugadores desde el texto...");
-            	controller_cargarJugadoresDesdeTexto("jugadores.csv",listaJugadores);
+            	if(banderaOpcionUno == 0){
+					puts("\nCargando jugadores desde el texto...");
+					controller_cargarJugadoresDesdeTexto("jugadores.csv",listaJugadores);
 
-            	puts("\nCargando selecciones desde el texto...");
-            	controller_cargarSeleccionesDesdeTexto("selecciones.csv", listaSelecciones);
+					puts("\nCargando selecciones desde el texto...");
+					controller_cargarSeleccionesDesdeTexto("selecciones.csv", listaSelecciones);
+					banderaOpcionUno = 1;
+            	}else{
+            		printf("\nLas listas ya fueron cargadas");
+
+            	}
                 break;
             case 2://ALTA
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
@@ -59,7 +64,7 @@ int main()
             case 4://BAJA
             	///si se da de baja un jugador convocado hay que reducir el contador de seleccion
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
-            		controller_removerJugador(listaJugadores);
+            		controller_removerJugador(listaJugadores, listaSelecciones);
             	}else{
             		printf("\nLas listas no estan cargadas\n");
             	}
@@ -79,9 +84,11 @@ int main()
 								controller_listarSelecciones(listaSelecciones);
 								break;
 							case 3:
-	///							if(selec_getConvocados(this, convocados)>0){		???
-								controller_listarJugadoresConvocados(listaJugadores);
-	///							}
+								if(selec_verificarConvocados(listaSelecciones)==1){
+									controller_listarJugadoresConvocados(listaJugadores);
+								}else{
+									printf("\nNo hay convocados en ninguna seleccion");
+								}
 								break;
 							default:
 								printf("\nError");
@@ -94,23 +101,25 @@ int main()
             	break;
             case 6://CONVOCAR-desconvocar JUGADORES
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
-					do {
+//					do {
 						printf("\n1- CONVOCAR"
 								"\n2- QUITAR DE LA SELECCION\n");
 						utn_getNumero(&option, "\nOpcion", "\nError", 1, 2, 1);
 						if(option == 1){
 							///Hacerle las verificaciones.
-							/// Tiene que tener integrado el selec_setConvocados--> que aumente el contador
-							/// cant max idJug en la fx no puede ser con ll_len, no?
 							controller_Convocar(listaJugadores, listaSelecciones);
 						}else{
-							if(option == 2){
-								///antes de entrar, desconvocar tiene que validarse con selec_getConvocados/que hayan convocados
-								printf("\nDesconvocar");
+							if(option == 2 && selec_verificarConvocados(listaSelecciones)==1){
+								if(controller_desconvocar(listaJugadores, listaSelecciones)==1){
+									printf("\nJugador desconvocado");
+								}
+
+							}else{
+								printf("\nNo hay convocados en ninguna seleccion");
 							}
 						}
-						seguir = ValidarSeguirNoSeguir("\nConvocar/desConvocar otro jugador? [S|N]", "\nError");
-					} while (seguir != 'N');
+//						seguir = ValidarSeguirNoSeguir("\nConvocar/desConvocar otro jugador? [S|N]", "\nError");
+//					} while (seguir != 'N');
 				}else{
 					printf("\nLas listas no estan cargadas\n");
 				}
@@ -123,13 +132,17 @@ int main()
             	}
             	break;
 			case 8://8. GENERAR ARCHIVO BINARIO: Generar y guardar en binario una nueva lista que contenga los jugadores convocados de una confederación ingresada por el usuario.
-				///hay que validar que haya algun convocado con selec_getConvocados!!!
-				/// y que haya un contador de confederacion que seria la suma de contadores de paises de esa confed...
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
-            		if(controller_guardarJugadoresModoBinario("convocados.dat", listaJugadores)==1){
-            			printf("\nLa lista fue creada \n");
-            			banderaOpcionOcho = 1;
-            		}
+            		if(selec_verificarConvocados(listaSelecciones)==1){
+						if(controller_guardarJugadoresModoBinario("convocados.dat", listaJugadores)==1){
+							printf("\nLa lista fue creada \n");
+							banderaOpcionOcho = 1;
+						}
+            		}else{
+                		printf("\nNo hay nadie convocado en ninguna seleccion\n");
+                	}
+            	}else{
+            		printf("\nLas listas no estan cargadas\n");
             	}
 				break;
 			case 9://9. CARGAR ARCHIVO BINARIO: Se deberá leer e imprimir los datos del archivo generado en el punto 8.
@@ -146,7 +159,6 @@ int main()
 //				unaSelecAux = ll_get(listaSelecciones, indice);
 //				selec_printOneSelec(unaSelecAux);
 //				controller_listarJugadoresConSeleccion(listaJugadores/*, listaSelecciones*/);
-
 
 
 				break;
@@ -171,8 +183,6 @@ int main()
 
     return 0;
 }
-
-
 
 
 

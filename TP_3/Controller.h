@@ -32,7 +32,7 @@ int controller_editarJugador(LinkedList* pArrayListJugador);
 /// @brief Baja del jugador
 /// @param pArrayListJugador
 /// @return
-int controller_removerJugador(LinkedList* pArrayListJugador);
+int controller_removerJugador(LinkedList* pArrayListJugador, LinkedList* pArrayListSeleccion);
 
 /// @brief Listar jugadores
 /// @param pArrayListJugador
@@ -91,6 +91,8 @@ int controller_ordenarJugadoresYSelecciones(LinkedList* pArrayListJugador, Linke
 int controller_Convocar(LinkedList* pArrayListJugador, LinkedList* pArrayListSelecc);
 
 int controller_listarJugadoresConvocados(LinkedList* pArrayListJugador);
+
+int controller_desconvocar(LinkedList* pArrayListJugador, LinkedList* pArrayListSeleccion);
 
 int controller_CargarArchivoBinario(char* pathJugadores, char* pathSelecciones);
 

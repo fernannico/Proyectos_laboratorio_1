@@ -27,10 +27,12 @@ int selec_getConvocados(Seleccion* this,int* convocados);
 
 ///-----------------------
 /// propias
-int selec_getOneSelec(Seleccion* unaSeleccion, int* id, char* pais, char* confederacion, int* convocados);
-int selec_printOneSelec(Seleccion* unaSeleccion);
+int selec_getOneSelec(Seleccion* this, int* id, char* pais, char* confederacion, int* convocados);
+int selec_printOneSelec(Seleccion* this);
 int selec_CompareByConfed(void* unaSelec,void* otraSelec);
 int selec_seleccionarConfederacion(char* confederacionOpcion);
+int selec_verificarConvocados(LinkedList* pArrayListSeleccion);
+int selec_desconvocarPorId(LinkedList* pArrayListSeleccion, int idSeleccion);
 
 ///La uso???
 int selec_BuscarIndiceSeleccionPorId(LinkedList* pArrayListSeleccion, int id);

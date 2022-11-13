@@ -14,8 +14,7 @@ Jugador* jug_newParametros(char* idStr,char* nombreCompletoStr,char* edadStr, ch
 
 	unJugador = jug_new();
 
-	///falta setter de id
-	unJugador->id = atoi(idStr);
+	jug_setId(unJugador, atoi(idStr));
 	jug_setNombreCompleto(unJugador, nombreCompletoStr);
 	jug_setEdad(unJugador, atoi(edadStr));
 	jug_setPosicion(unJugador, posicionStr);
@@ -52,11 +51,11 @@ int jug_getId(Jugador* this,int* id){
 }
 
 
-int jug_setNombreCompleto(Jugador* this,char* nombreCompleto){
+int jug_setNombreCompleto(Jugador* this,char* nombre){
 	int retorno = -1;
 
-    if(this != NULL && nombreCompleto > 0){
-    	strcpy(this->nombreCompleto,nombreCompleto);
+    if(this != NULL /*&& nombreCompleto != NULL*/){
+    	strcpy(this->nombreCompleto,nombre);
         retorno = 0;
     }
 
@@ -76,7 +75,7 @@ int jug_getNombreCompleto(Jugador* this,char* nombreCompleto)
 int jug_setPosicion(Jugador* this,char* posicion){
 	int retorno = -1;
 
-    if(this != NULL && posicion > 0){
+    if(this != NULL && posicion != NULL){
     	strcpy(this->posicion,posicion);
         retorno = 0;
     }
@@ -98,7 +97,7 @@ int jug_getPosicion(Jugador* this,char* posicion)
 int jug_setNacionalidad(Jugador* this,char* nacionalidad){
 	int retorno = -1;
 
-    if(this != NULL && nacionalidad > 0){
+    if(this != NULL && nacionalidad != NULL){
     	strcpy(this->nacionalidad, nacionalidad);
         retorno = 0;
     }
@@ -145,7 +144,7 @@ int jug_getEdad(Jugador* this,int* edad)
 int jug_setIdSeleccion(Jugador* this,int idSeleccion){
 	int retorno = -1;
 
-    if(this != NULL && idSeleccion >= 0){
+    if(this != NULL){
     	this->idSeleccion = idSeleccion;
         retorno = 0;
     }
@@ -207,20 +206,23 @@ int jug_printOnePlayer(Jugador* unJugador){
 	if(jug_getOnePlayer(unJugador, &id, nombreCompleto, &edad, posicion, nacionalidad, &idSeleccion)==1){
 		retorno = 1;
 		if(idSeleccion==0){
-			printf("\n%-4d %-25s %-6d %-20s %-17s %-24s", id, nombreCompleto, edad, posicion, nacionalidad, "No convocado");
+			printf("\n| %-4d | %-25s | %-6d | %-20s | %-17s | %-15s |", id, nombreCompleto, edad, posicion, nacionalidad, "No convocado");
 		}
 		for(int i = 0; i < cantidadSelecciones; i++){
 			seleccionAux = (Seleccion*)ll_get(pArrayListSeleccionAux, i);
 			if(selec_getId(seleccionAux, &idSelecAux)==0){
 				if(idSelecAux == idSeleccion){
 					if(selec_getPais(seleccionAux, pais)==0){
-						printf("\n%-4d %-25s %-6d %-20s %-17s %-24s", id, nombreCompleto, edad, posicion, nacionalidad, pais);
+						printf("\n| %-4d | %-25s | %-6d | %-20s | %-17s | %-15s |", id, nombreCompleto, edad, posicion, nacionalidad, pais);
 					}
 					break;
 				}
 			}
 		}
 	}
+
+	ll_deleteLinkedList(pArrayListSeleccionAux);
+
 	return retorno;
 }
 
@@ -232,19 +234,19 @@ int jug_modificarNombre(Jugador* this){
 	char confirmar;
 
 	if(this != NULL){
-		jug_getNombreCompleto(this, nombreActual);
+		if(jug_getNombreCompleto(this, nombreActual)==0){
+			if(utn_getNombre(nombreNuevo, 100, "\nIngrese el nuevo nombre del jugador", "\nError", 1)==0){
+				ModularNombre(nombreNuevo);
 
-		if(utn_getNombre(nombreNuevo, 100, "\nIngrese el nuevo nombre del jugador", "\nError", 1)==0){
-			ModularNombre(nombreNuevo);
-
-			printf("\nModificando el nombre del jugador de %s a %s...", nombreActual, nombreNuevo);
-			confirmar = ValidarSeguirNoSeguir("\nModificar el nombre del jugador? [S|N]", "\nError");
-			if(confirmar == 'S'){
-				jug_setNombreCompleto(this, nombreNuevo);
-				retorno = 1;
+				printf("\nModificando el nombre del jugador de %s a %s...", nombreActual, nombreNuevo);
+				confirmar = ValidarSeguirNoSeguir("\nModificar el nombre del jugador? [S|N]", "\nError");
+				if(confirmar == 'S'){
+					jug_setNombreCompleto(this, nombreNuevo);
+					retorno = 1;
+				}
+			}else{
+				printf("\nModificacion interrumpida");
 			}
-		}else{
-			printf("\nModificacion interrumpida");
 		}
 	}
 
@@ -303,7 +305,6 @@ int jug_modificarPosicion(Jugador* this){
 	return retorno;
 }
 
-///podemos hacer una matriz de 32 paises harcodeados y que ingrese el numero--> char nacionalidad[32][30]
 int jug_modificarNacionalidad(Jugador* this){
 	int retorno = -1;
 	char nacionalidadActual[30];
@@ -407,28 +408,6 @@ int jug_BuscarIndiceJugadorPorId(LinkedList* pArrayListJugador, int id){
 	return indice;
 }
 
-/*
-int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id){
-	int retorno = 0;
-	int indice = -1;
-	int cantidad;
-	Jugador* jugadorAux;
-
-	indice = jug_BuscarIndiceJugadorPorId(pArrayListJugador, id);
-	cantidad = ll_len(pArrayListJugador);
-
-	if(indice != -1){
-		for(int i=0;i<cantidad;i++){
-			jugadorAux = (Jugador*)ll_get(pArrayListJugador, indice);
-			jug_printOnePlayer(jugadorAux);
-			retorno = 1;
-			break;
-		}
-	}
-
-	return retorno;
-}
-*/
 void jug_actualizarIdModoTexto(int id){
 	FILE* pArchivo;
 
@@ -458,3 +437,27 @@ int jug_AsignarIdDesdeTexto(char* path){
 
 	return id;
 }
+
+
+/*
+int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id){
+	int retorno = 0;
+	int indice = -1;
+	int cantidad;
+	Jugador* jugadorAux;
+
+	indice = jug_BuscarIndiceJugadorPorId(pArrayListJugador, id);
+	cantidad = ll_len(pArrayListJugador);
+
+	if(indice != -1){
+		for(int i=0;i<cantidad;i++){
+			jugadorAux = (Jugador*)ll_get(pArrayListJugador, indice);
+			jug_printOnePlayer(jugadorAux);
+			retorno = 1;
+			break;
+		}
+	}
+
+	return retorno;
+}
+*/
