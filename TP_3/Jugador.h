@@ -57,6 +57,7 @@ int jug_BuscarIndiceJugadorPorId(LinkedList* pArrayListJugador, int id);
 
 void jug_actualizarIdModoTexto(int id);
 int jug_AsignarIdDesdeTexto(char* path);
+void mostrarCabeceraJugadores(void);
 
 ///la uso--> printfOnePlayer??? falta validar seleccion
 int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id);

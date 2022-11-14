@@ -221,6 +221,10 @@ int selec_desconvocarPorId(LinkedList* pArrayListSeleccion, int idSeleccion){
 	return retorno;
 }
 
+void mostrarCabeceraSelecciones(void){
+	printf("\n| %-2s | %-15s | %-9s | %-2s |","id","pais", "confederacion", "convocados");
+	printf("\n-----------------------------------------------------");
+}
 
 
 

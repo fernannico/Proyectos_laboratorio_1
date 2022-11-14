@@ -438,7 +438,10 @@ int jug_AsignarIdDesdeTexto(char* path){
 	return id;
 }
 
-
+void mostrarCabeceraJugadores(void){
+	printf("\n| %-4s | %-25s | %-6s | %-20s | %-17s | %-15s |","id","nombre Completo", "edad", "posicion", "nacionalidad", "Selecion");
+	printf("\n----------------------------------------------------------------------------------------------------------");
+}
 /*
 int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id){
 	int retorno = 0;

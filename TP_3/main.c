@@ -7,11 +7,18 @@ int main()
 	setbuf(stdout,NULL);
     int option;
 //    char seguir;
-    int banderaOpcionOcho = 0;
     int banderaOpcionUno = 0;
+    int banderaOpcionOcho = 0;
+//    int banderaOpcionDiez = 0;///va aca? porq solo funcionaria 1 vez...
 
     LinkedList* listaJugadores = ll_newLinkedList();
     LinkedList* listaSelecciones = ll_newLinkedList();
+
+//    int cantidadJugadores;
+//	Jugador* unJugador;
+//    int validarCambios;
+//    LinkedList* listaJugadoresSinCambios;
+//    LinkedList* listaSeleccionesAux = ll_clone(listaSelecciones);
 
     do{
     	printf( "\n\n|=============================|"
@@ -27,21 +34,24 @@ int main()
     			"\n| 9 | CARGAR ARCHIVO BINARIO  |\n|-----------------------------|"
     			"\n| 10 | GUARDAR ARCHIVO CSV    |\n|-----------------------------|"
     			"\n| 11 | SALIR                  |\n|=============================|");
-    	utn_getNumero(&option, "\nOpcion", "\nError", 1,11, 1);
+    	utn_getNumero(&option, "\nOpcion", "\nError", 1,12, 1);
         switch(option)
         {
             case 1:
             	if(banderaOpcionUno == 0){
-					puts("\nCargando jugadores desde el texto...");
-					controller_cargarJugadoresDesdeTexto("jugadores.csv",listaJugadores);
-
-					puts("\nCargando selecciones desde el texto...");
-					controller_cargarSeleccionesDesdeTexto("selecciones.csv", listaSelecciones);
+					if(controller_cargarJugadoresDesdeTexto("jugadores.csv",listaJugadores)==1){
+						puts("\nCargando jugadores desde el texto...");
+					}
+					if(controller_cargarSeleccionesDesdeTexto("selecciones.csv", listaSelecciones)==1){
+						puts("\nCargando selecciones desde el texto...");
+					}
 					banderaOpcionUno = 1;
             	}else{
             		printf("\nLas listas ya fueron cargadas");
 
             	}
+//                listaJugadoresSinCambios = ll_clone(listaJugadores);
+
                 break;
             case 2://ALTA
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
@@ -55,6 +65,7 @@ int main()
             	}
             	break;
             case 3://MODIFICACION
+            	///poner cuando el jugador fue bajado (ahora esta como "no existe") como en desconvocados
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
             		controller_editarJugador(listaJugadores);
             	}else{
@@ -62,7 +73,7 @@ int main()
             	}
             	break;
             case 4://BAJA
-            	///si se da de baja un jugador convocado hay que reducir el contador de seleccion
+            	///poner cuando el jugador fue bajado (ahora esta como "no existe") como en desconvocados
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
             		controller_removerJugador(listaJugadores, listaSelecciones);
             	}else{
@@ -107,6 +118,7 @@ int main()
 						utn_getNumero(&option, "\nOpcion", "\nError", 1, 2, 1);
 						if(option == 1){
 							///Hacerle las verificaciones.
+							///poner cuando el jugador fue bajado (ahora esta como "no existe") como en desconvocados
 							controller_Convocar(listaJugadores, listaSelecciones);
 						}else{
 							if(option == 2 && selec_verificarConvocados(listaSelecciones)==1){
@@ -134,6 +146,9 @@ int main()
 			case 8://8. GENERAR ARCHIVO BINARIO: Generar y guardar en binario una nueva lista que contenga los jugadores convocados de una confederación ingresada por el usuario.
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
             		if(selec_verificarConvocados(listaSelecciones)==1){
+            			///habria que validar si esa confederacion tiene convocados y recien ahi crear el archivo
+            			/// esto tendria que ser antes de el controller porque al usar dentro el auxiliar, no se muestran los contadores actualizados
+            			/// selec_seleccionarConfederacion antes del controller?
 						if(controller_guardarJugadoresModoBinario("convocados.dat", listaJugadores)==1){
 							printf("\nLa lista fue creada \n");
 							banderaOpcionOcho = 1;
@@ -151,15 +166,13 @@ int main()
 				}
 				break;
 			case 10://GUARDAR ARCHIVOS .CSV
-				///validar con containsAll?
-
-//				printf("id de selecc:");
-//				scanf("%d", &id);
-//				indice = selec_BuscarIndiceSeleccionPorId(listaSelecciones, id);
-//				unaSelecAux = ll_get(listaSelecciones, indice);
-//				selec_printOneSelec(unaSelecAux);
-//				controller_listarJugadoresConSeleccion(listaJugadores/*, listaSelecciones*/);
-
+				///validar con containsAll si hubieron cambios?
+				if(controller_guardarJugadoresModoTexto("jugadores.csv", listaJugadores)==1){
+					printf("\nGuardando los jugadores en el archivo");
+				}
+				if(controller_guardarSeleccionesModoTexto("selecciones.csv", listaSelecciones)==1){
+					printf("\nGuardando las selecciones en el archivo");
+				}
 
 				break;
 			case 11:
@@ -167,19 +180,48 @@ int main()
 				/// si sale sin querer guardar cambios.. se tendria que borrar el binario... o al menos desconvocar a todos y guardar...
 				/// no dice que tenga que guardar el binario... si el csv.
 
+
+				/**solo valida si falta un elemento... no si se cambiaron
+						validarCambios =ll_containsAll(listaJugadoresSinCambios, listaJugadores);
+						if(validarCambios==0){
+							printf("\nLas lsitas J difieren");
+						}else{
+							if(validarCambios ==1){
+								printf("\nLas lsitas J no difieren");
+							}else{
+								if(validarCambios==-1)
+								printf("\nNULL");
+							}
+						}
+				 */
+
+				/*lo mismo.. solo valida q esten los elementos, no si se cambiaron
+						cantidadJugadores = jug_AsignarIdDesdeTexto("idJugador.csv")-1;
+						printf("%d", cantidadJugadores);
+						for(int i = 0; i<cantidadJugadores;i++){
+							unJugador = (Jugador*)ll_get(listaJugadores, i);
+							if(ll_contains(listaJugadoresSinCambios, unJugador)==1){
+								printf("\nesta");
+							}else{
+								printf("\n\nNO ESTA\n\n");
+							}
+						}
+				*/
+
 				printf("\nSaliendo del programa");
 
-				ll_clear(listaJugadores);
-				ll_clear(listaSelecciones);
-				ll_deleteLinkedList(listaJugadores);
-				ll_deleteLinkedList(listaSelecciones);
+//				controller_listarJugadores(listaJugadoresAux);
+//				ll_clear(listaJugadores);
+//				ll_clear(listaSelecciones);
+//				ll_deleteLinkedList(listaJugadores);
+//				ll_deleteLinkedList(listaSelecciones);
 
 				break;
 			default:
 
 				break;
         }
-    }while(option != 11);
+    }while(option != 12);
 
     return 0;
 }
