@@ -6,19 +6,13 @@ int main()
 {
 	setbuf(stdout,NULL);
     int option;
-//    char seguir;
     int banderaOpcionUno = 0;
     int banderaOpcionOcho = 0;
-//    int banderaOpcionDiez = 0;///va aca? porq solo funcionaria 1 vez...
+    int banderaOpcionDiez = 0;
+    char validarSalir;
 
     LinkedList* listaJugadores = ll_newLinkedList();
     LinkedList* listaSelecciones = ll_newLinkedList();
-
-//    int cantidadJugadores;
-//	Jugador* unJugador;
-//    int validarCambios;
-//    LinkedList* listaJugadoresSinCambios;
-//    LinkedList* listaSeleccionesAux = ll_clone(listaSelecciones);
 
     do{
     	printf( "\n\n|=============================|"
@@ -51,7 +45,6 @@ int main()
 
             	}
 //                listaJugadoresSinCambios = ll_clone(listaJugadores);
-
                 break;
             case 2://ALTA
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
@@ -166,71 +159,34 @@ int main()
 				}
 				break;
 			case 10://GUARDAR ARCHIVOS .CSV
-				///validar con containsAll si hubieron cambios?
-				if(controller_guardarJugadoresModoTexto("jugadores.csv", listaJugadores)==1){
+				if( controller_guardarJugadoresModoTexto("jugadores.csv", listaJugadores)==1 &&
+					controller_guardarSeleccionesModoTexto("selecciones.csv", listaSelecciones)==1){
 					printf("\nGuardando los jugadores en el archivo");
-				}
-				if(controller_guardarSeleccionesModoTexto("selecciones.csv", listaSelecciones)==1){
 					printf("\nGuardando las selecciones en el archivo");
+					banderaOpcionDiez = 1;
 				}
-
 				break;
 			case 11:
-				///hacer delete de ll...
-				/// si sale sin querer guardar cambios.. se tendria que borrar el binario... o al menos desconvocar a todos y guardar...
-				/// no dice que tenga que guardar el binario... si el csv.
+				if(banderaOpcionDiez == 0)
+					printf("\nCUIDADO, eligio salir sin antes guardar los archivos de texto (opcion 10)");
+				if(banderaOpcionOcho == 0)
+					printf("\nCUIDADO, eligio salir sin antes guardar los archivos binarios (opcion 8)");
 
-
-				/**solo valida si falta un elemento... no si se cambiaron
-						validarCambios =ll_containsAll(listaJugadoresSinCambios, listaJugadores);
-						if(validarCambios==0){
-							printf("\nLas lsitas J difieren");
-						}else{
-							if(validarCambios ==1){
-								printf("\nLas lsitas J no difieren");
-							}else{
-								if(validarCambios==-1)
-								printf("\nNULL");
-							}
-						}
-				 */
-
-				/*lo mismo.. solo valida q esten los elementos, no si se cambiaron
-						cantidadJugadores = jug_AsignarIdDesdeTexto("idJugador.csv")-1;
-						printf("%d", cantidadJugadores);
-						for(int i = 0; i<cantidadJugadores;i++){
-							unJugador = (Jugador*)ll_get(listaJugadores, i);
-							if(ll_contains(listaJugadoresSinCambios, unJugador)==1){
-								printf("\nesta");
-							}else{
-								printf("\n\nNO ESTA\n\n");
-							}
-						}
-				*/
-
-				printf("\nSaliendo del programa");
-
-//				controller_listarJugadores(listaJugadoresAux);
-//				ll_clear(listaJugadores);
-//				ll_clear(listaSelecciones);
-//				ll_deleteLinkedList(listaJugadores);
-//				ll_deleteLinkedList(listaSelecciones);
-
-				break;
-			default:
-
+				validarSalir = ValidarSeguirNoSeguir("\nEsta seguro que quiere salir? [S|N] ","\nError");
+				if(validarSalir == 'S'){
+					printf("\nSaliendo del programa");
+					ll_clear(listaJugadores);
+					ll_clear(listaSelecciones);
+					ll_deleteLinkedList(listaJugadores);
+					ll_deleteLinkedList(listaSelecciones);
+				}
 				break;
         }
-    }while(option != 12);
+    }while(option != 11 || validarSalir != 'S');
 
     return 0;
 }
 
-
-
-
-//					printf("\n%-4s %-25s %-6s %-20s %-17s %-11s","id","nombre Completo", "edad", "posicion", "nacionalidad", "Selecion");
-//					printf("\n-------------------------------------------------------------------------------------------");
 
 
 
