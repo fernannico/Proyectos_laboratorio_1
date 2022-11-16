@@ -114,7 +114,7 @@ int selec_CompareByConfed(void* unaSelec,void* otraSelec){
 	selecUno = (Seleccion*)unaSelec;
 	selecDos = (Seleccion*)otraSelec;
 
-	compara = strcmpi(selecUno->confederacion, selecDos->confederacion);
+	compara = stricmp(selecUno->confederacion, selecDos->confederacion);
 
 	return compara;
 }

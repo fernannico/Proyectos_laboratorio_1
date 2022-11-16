@@ -44,7 +44,6 @@ int main()
             		printf("\nLas listas ya fueron cargadas");
 
             	}
-//                listaJugadoresSinCambios = ll_clone(listaJugadores);
                 break;
             case 2://ALTA
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){

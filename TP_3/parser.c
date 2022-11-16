@@ -2,8 +2,8 @@
 #include "parser.h"
 
 
-int parser_JugadorFromText(FILE* pFile , LinkedList* pArrayListJugador)
-{
+int parser_JugadorFromText(FILE* pFile , LinkedList* pArrayListJugador){
+	int retorno = -1;
 	Jugador* unJugador = NULL;
 	char id[10];
 	char nombreCompleto[100];
@@ -18,19 +18,23 @@ int parser_JugadorFromText(FILE* pFile , LinkedList* pArrayListJugador)
 		while(feof(pFile)==0){
 			fscanf(pFile, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", id, nombreCompleto, edad, posicion, nacionalidad, idSeleccion);
 			unJugador = jug_newParametros(id, nombreCompleto, edad, posicion, nacionalidad, idSeleccion);
-			if(unJugador!=NULL)
-			ll_add(pArrayListJugador, unJugador);
+			if(unJugador!=NULL){
+				if(ll_add(pArrayListJugador, unJugador)==0){
+					retorno = 1;
+				}
+			}
 		}
 	}
 
 //	free(unJugador);
 
-    return 1;
+    return retorno;
 }
 
 
-int parser_JugadorFromBinary(FILE* pFile , LinkedList* pArrayListJugador)
-{
+int parser_JugadorFromBinary(FILE* pFile , LinkedList* pArrayListJugador){
+	int retorno = -1;
+
 	Jugador* jugadorAux;
 
 	if(pFile !=NULL && pArrayListJugador != NULL){
@@ -43,18 +47,21 @@ int parser_JugadorFromBinary(FILE* pFile , LinkedList* pArrayListJugador)
 					free(jugadorAux);
 					break;//para que el ultimo q se lee y agrega en MD no se guarde en el ll
 				}
-				ll_add(pArrayListJugador, jugadorAux);
+				if(ll_add(pArrayListJugador, jugadorAux)==0){
+					retorno = 1;
+				}
 			}
 		}
 	}
 
-    return 1;
+    return retorno;
 }
 
 
-int parser_SeleccionFromText(FILE* pFile , LinkedList* pArrayListSeleccion)
-{
-	Seleccion* unaSeleccion;
+int parser_SeleccionFromText(FILE* pFile , LinkedList* pArrayListSeleccion){
+	int retorno = -1;
+
+	Seleccion* unaSeleccion = NULL;
 	char id[10];
 	char pais[100];
 	char confederacion[100];
@@ -67,11 +74,15 @@ int parser_SeleccionFromText(FILE* pFile , LinkedList* pArrayListSeleccion)
 			fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n", id, pais, confederacion, convocados);
 			unaSeleccion = selec_newParametros(id, pais, confederacion, convocados);
 
-			ll_add(pArrayListSeleccion, unaSeleccion);
+			if(unaSeleccion != NULL){
+				if(ll_add(pArrayListSeleccion, unaSeleccion)==0){
+					retorno = 1;
+				}
+			}
 		}
 	}
 
 
-    return 1;
+    return retorno;
 }
 

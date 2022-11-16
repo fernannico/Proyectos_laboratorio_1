@@ -199,27 +199,28 @@ int jug_printOnePlayer(Jugador* unJugador){
 
 	LinkedList* pArrayListSeleccionAux;
 	pArrayListSeleccionAux = ll_newLinkedList();
-	controller_cargarSeleccionesDesdeTexto("selecciones.csv", pArrayListSeleccionAux);
+	if(controller_cargarSeleccionesDesdeTexto("selecciones.csv", pArrayListSeleccionAux)==1){
+		cantidadSelecciones = ll_len(pArrayListSeleccionAux);
 
-	cantidadSelecciones = ll_len(pArrayListSeleccionAux);
-
-	if(jug_getOnePlayer(unJugador, &id, nombreCompleto, &edad, posicion, nacionalidad, &idSeleccion)==1){
-		retorno = 1;
-		if(idSeleccion==0){
-			printf("\n| %-4d | %-25s | %-6d | %-20s | %-17s | %-15s |", id, nombreCompleto, edad, posicion, nacionalidad, "No convocado");
-		}
-		for(int i = 0; i < cantidadSelecciones; i++){
-			seleccionAux = (Seleccion*)ll_get(pArrayListSeleccionAux, i);
-			if(selec_getId(seleccionAux, &idSelecAux)==0){
-				if(idSelecAux == idSeleccion){
-					if(selec_getPais(seleccionAux, pais)==0){
-						printf("\n| %-4d | %-25s | %-6d | %-20s | %-17s | %-15s |", id, nombreCompleto, edad, posicion, nacionalidad, pais);
+		if(jug_getOnePlayer(unJugador, &id, nombreCompleto, &edad, posicion, nacionalidad, &idSeleccion)==1 && cantidadSelecciones != -1){
+			retorno = 1;
+			if(idSeleccion==0){
+				printf("\n| %-4d | %-25s | %-6d | %-20s | %-17s | %-15s |", id, nombreCompleto, edad, posicion, nacionalidad, "No convocado");
+			}
+			for(int i = 0; i < cantidadSelecciones; i++){
+				seleccionAux = (Seleccion*)ll_get(pArrayListSeleccionAux, i);
+				if(selec_getId(seleccionAux, &idSelecAux)==0){
+					if(idSelecAux == idSeleccion){
+						if(selec_getPais(seleccionAux, pais)==0){
+							printf("\n| %-4d | %-25s | %-6d | %-20s | %-17s | %-15s |", id, nombreCompleto, edad, posicion, nacionalidad, pais);
+						}
+						break;
 					}
-					break;
 				}
 			}
 		}
 	}
+
 
 	ll_deleteLinkedList(pArrayListSeleccionAux);
 
@@ -332,57 +333,76 @@ int jug_modificarNacionalidad(Jugador* this){
 }
 
 int jug_CompareByName(void* unJugador,void* otroJugador){
-	Jugador* jugadorUno;
-	Jugador* jugadorDos;
-
+	Jugador* jugadorUno = NULL;
+	Jugador* jugadorDos = NULL;
+	char nombreJugadorUno[100];
+	char nombreJugadorDos[100];
 	int compara = 0;
 
 	jugadorUno = (Jugador*)unJugador;
 	jugadorDos = (Jugador*)otroJugador;
 
-	compara = stricmp(jugadorUno->nombreCompleto, jugadorDos->nombreCompleto);
+	if(jugadorUno != NULL && jugadorDos != NULL){
+		if(jug_getNombreCompleto(jugadorUno, nombreJugadorUno)==0 &&
+				jug_getNombreCompleto(jugadorDos, nombreJugadorDos)==0){
+			compara = stricmp(nombreJugadorUno, nombreJugadorDos);
 
-	if(compara > 0){
-		compara = 1;
-	}else{
-		if(compara < 0){
-			compara = -1;
+			if(compara > 0){
+				compara = 1;
+			}else{
+				if(compara < 0){
+					compara = -1;
+				}
+			}
 		}
 	}
-
 	return compara;
 }
 
 int jug_CompareByNationality(void* unJugador,void* otroJugador){
-	Jugador* jugadorUno;
-	Jugador* jugadorDos;
+	Jugador* jugadorUno = NULL;
+	Jugador* jugadorDos = NULL;
+	char nacionalidadJugUno[30];
+	char nacionalidadJugDos[30];
 
 	int compara;
 
 	jugadorUno = (Jugador*)unJugador;
 	jugadorDos = (Jugador*)otroJugador;
 
-	compara = strcmpi(jugadorUno->nacionalidad, jugadorDos->nacionalidad);
+	if(jugadorUno != NULL && jugadorDos != NULL){
+		if(jug_getNacionalidad(jugadorUno, nacionalidadJugUno)==0 &&
+				jug_getNacionalidad(jugadorDos, nacionalidadJugDos)==0){
+			compara = strcmpi(nacionalidadJugUno, nacionalidadJugDos);
+		}
+	}
 
 	return compara;
 }
 
 int jug_CompareByAge(void* unJugador,void* otroJugador){
 	int compara = 0;
-
-	Jugador* jugadorUno;
-	Jugador* jugadorDos;
+	Jugador* jugadorUno = NULL;
+	Jugador* jugadorDos = NULL;
+	int edadJugUno;
+	int edadJugDos;
 
 	jugadorUno = (Jugador*)unJugador;
 	jugadorDos = (Jugador*)otroJugador;
 
-	if(jugadorUno->edad > jugadorDos->edad){
-		compara = 1;
-	}else{
-		if(jugadorUno->edad < jugadorDos->edad){
-			compara = -1;
+	if(jugadorUno != NULL && jugadorDos != NULL){
+		if(jug_getEdad(jugadorUno, &edadJugUno)==0 &&
+				jug_getEdad(jugadorDos, &edadJugDos)==0){
+			if(edadJugUno > edadJugDos){
+				compara = 1;
+			}else{
+				if(edadJugUno < edadJugDos){
+					compara = -1;
+				}
+			}
 		}
 	}
+
 
 	return compara;
 }
@@ -393,15 +413,17 @@ int jug_BuscarIndiceJugadorPorId(LinkedList* pArrayListJugador, int id){
 	int idAux;
 	Jugador* unJugador;
 
-	cantidad = ll_len(pArrayListJugador);
+	if(pArrayListJugador != NULL){
+		cantidad = ll_len(pArrayListJugador);
+		if(cantidad != -1){
+			for(int i = 0; i<cantidad; i++){
+				unJugador = ll_get(pArrayListJugador, i);
 
-	for(int i = 0; i<cantidad; i++){
-		unJugador = ll_get(pArrayListJugador, i);
-
-		if(jug_getId(unJugador, &idAux)==0 && idAux == id){
-			indice = ll_indexOf(pArrayListJugador, unJugador);
-			///recien agregado
-			break;
+				if(jug_getId(unJugador, &idAux)==0 && idAux == id){
+					indice = ll_indexOf(pArrayListJugador, unJugador);
+					break;
+				}
+			}
 		}
 	}
 
@@ -413,7 +435,9 @@ void jug_actualizarIdModoTexto(int id){
 
 	pArchivo = fopen("idJugador.csv", "w");
 
-	fprintf(pArchivo, "%d\n", id);
+	if(pArchivo != NULL){
+		fprintf(pArchivo, "%d\n", id);
+	}
 
 	fclose(pArchivo);
 }
@@ -421,7 +445,7 @@ void jug_actualizarIdModoTexto(int id){
 int jug_AsignarIdDesdeTexto(char* path){
 	FILE* pArchivo = NULL;
 	char idTexto[5];
-	int id;
+	int id = -1;
 
 	pArchivo = fopen(path, "r");
 
@@ -442,25 +466,3 @@ void mostrarCabeceraJugadores(void){
 	printf("\n| %-4s | %-25s | %-6s | %-20s | %-17s | %-15s |","id","nombre Completo", "edad", "posicion", "nacionalidad", "Selecion");
 	printf("\n----------------------------------------------------------------------------------------------------------");
 }
-/*
-int jug_MostrarUnJugadorPorId(LinkedList* pArrayListJugador, int id){
-	int retorno = 0;
-	int indice = -1;
-	int cantidad;
-	Jugador* jugadorAux;
-
-	indice = jug_BuscarIndiceJugadorPorId(pArrayListJugador, id);
-	cantidad = ll_len(pArrayListJugador);
-
-	if(indice != -1){
-		for(int i=0;i<cantidad;i++){
-			jugadorAux = (Jugador*)ll_get(pArrayListJugador, indice);
-			jug_printOnePlayer(jugadorAux);
-			retorno = 1;
-			break;
-		}
-	}
-
-	return retorno;
-}
-*/
