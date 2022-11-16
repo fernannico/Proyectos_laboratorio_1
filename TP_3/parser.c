@@ -26,8 +26,6 @@ int parser_JugadorFromText(FILE* pFile , LinkedList* pArrayListJugador){
 		}
 	}
 
-//	free(unJugador);
-
     return retorno;
 }
 
@@ -45,7 +43,7 @@ int parser_JugadorFromBinary(FILE* pFile , LinkedList* pArrayListJugador){
 
 				if(feof(pFile)){
 					free(jugadorAux);
-					break;//para que el ultimo q se lee y agrega en MD no se guarde en el ll
+					break;
 				}
 				if(ll_add(pArrayListJugador, jugadorAux)==0){
 					retorno = 1;

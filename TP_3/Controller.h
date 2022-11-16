@@ -128,6 +128,13 @@ int controller_listarJugadoresConvocados(LinkedList* pArrayListJugador);
 /// 					 1 si logro desconvocar al jugador de una seleccion
 int controller_desconvocar(LinkedList* pArrayListJugador, LinkedList* pArrayListSeleccion);
 
+/// @brief controller para la opcion de convocar - desconvocar jugadores
+/// @param pArrayListJugador LinkedList* Puntero a la lista de jugadores
+/// @param pArrayListSeleccion LinkedList* Puntero a la lista  de selecciones
+/// @return retorna -1 si no pudo convocar o desconvocar
+/// 				 1 si pudo
+int controller_convocarDesconvocar(LinkedList* pArrayListJugador, LinkedList* pArrayListSeleccion);
+
 /// @brief Carga los datos de los jugadores desde el archivo generado en modo binario.
 /// @param pathJugadores cadena de caracteres que representa el archivo de jugadores (ruta y el nombre del archivo)
 /// @param pathSelecciones cadena de caracteres que representa el archivo de selecciones (ruta y el nombre del archivo)

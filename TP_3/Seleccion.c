@@ -80,12 +80,12 @@ int selec_getConvocados(Seleccion* this,int* convocados){
 int selec_getOneSelec(Seleccion* this, int* id, char* pais, char* confederacion, int* convocados){
 	int retorno = -1;
 
-//	if(unaSeleccion != NULL && id != NULL && pais != NULL && confederacion != NULL && confederacion != NULL){
+	if(this != NULL && id != NULL && pais != NULL && confederacion != NULL && confederacion != NULL){
 		if( selec_getId(this, id) == 0 && selec_getPais(this, pais) == 0 &&
 			selec_getConfederacion(this, confederacion) == 0 && selec_getConvocados(this, convocados) == 0){
 			retorno = 1;
 		}
-//	}
+	}
 
 	return retorno;
 }
@@ -152,7 +152,6 @@ int selec_seleccionarConfederacion(char* confederacionOpcion){
 	return retorno;
 }
 
-///La uso???
 int selec_BuscarIndiceSeleccionPorId(LinkedList* pArrayListSeleccion, int id){
 	int indice = -1;
 	int cantidad;
@@ -192,8 +191,6 @@ int selec_verificarConvocados(LinkedList* pArrayListSeleccion){
 			}
 		}
 	}
-
-//	free(unaSeleccion); da error en la desconvocacion
 
 	return retorno;
 }

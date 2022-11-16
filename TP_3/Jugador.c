@@ -54,7 +54,7 @@ int jug_getId(Jugador* this,int* id){
 int jug_setNombreCompleto(Jugador* this,char* nombre){
 	int retorno = -1;
 
-    if(this != NULL /*&& nombreCompleto != NULL*/){
+    if(this != NULL && nombre != NULL){
     	strcpy(this->nombreCompleto,nombre);
         retorno = 0;
     }
@@ -280,7 +280,6 @@ int jug_modificarEdad(Jugador* this){
 	return retorno;
 }
 
-///podemos hacer una matriz de 11 posiciones harcodeados y que ingrese el numero--> char posicion[11][30]
 int jug_modificarPosicion(Jugador* this){
 	int retorno = -1;
 	char posicionActual[30];
@@ -290,17 +289,15 @@ int jug_modificarPosicion(Jugador* this){
 	if(this != NULL){
 		jug_getPosicion(this, posicionActual);
 
-		printf("\nIngrese la nueva posicion del jugador");
-		fflush(stdin);
-		scanf("%[^\n]s", posicionNueva);
-//		utn_getNumero(&posicionNueva, "\nIngrese la nueva posicion del jugador", "\nError", 16, 60, 1);
-
-		printf("\nModificando la posicion del jugador de %s a %s", posicionActual, posicionNueva);
-		confirmar = ValidarSeguirNoSeguir("\nModificar la posicion del jugador? [S|N]", "\nError");
-		if(confirmar == 'S'){
-			jug_setPosicion(this, posicionNueva);
-			retorno = 1;
+		if(utn_getNombre(posicionNueva, 30, "\nIngrese la nueva posicion del jugador: ", "\nError, intente de nuevo", 1)==0){
+			printf("\nModificando la posicion del jugador de %s a %s", posicionActual, posicionNueva);
+			confirmar = ValidarSeguirNoSeguir("\nModificar la posicion del jugador? [S|N]", "\nError");
+			if(confirmar == 'S'){
+				jug_setPosicion(this, posicionNueva);
+				retorno = 1;
+			}
 		}
+
 	}
 
 	return retorno;
@@ -315,17 +312,16 @@ int jug_modificarNacionalidad(Jugador* this){
 	if(this != NULL){
 		jug_getNacionalidad(this, nacionalidadActual);
 
-//		utn_getNumero(&nacionalidadNueva, "\nIngrese la nueva edad del jugador [16-60]", "\nError", 16, 60, 1);
-		printf("\nIngrese la nueva nacionalidad del jugador");
-		fflush(stdin);
-		scanf("%[^\n]s", nacionalidadNueva);
-
-		printf("\nModificando la nacionalidad del jugador de %s a %s", nacionalidadActual, nacionalidadNueva);
-		confirmar = ValidarSeguirNoSeguir("\nModificar la nacionalidad del jugador? [S|N]", "\nError");
-		if(confirmar == 'S'){
-			jug_setNacionalidad(this, nacionalidadNueva);
-			retorno = 1;
+		if(utn_getNombre(nacionalidadNueva, 30, "\nIngrese la nueva nacionalidad del jugador: ", "\nError, intente de nuevo", 1)==0){
+			ModularNombre(nacionalidadNueva);
+			printf("\nModificando la nacionalidad del jugador de %s a %s", nacionalidadActual, nacionalidadNueva);
+			confirmar = ValidarSeguirNoSeguir("\nModificar la nacionalidad del jugador? [S|N]", "\nError");
+			if(confirmar == 'S'){
+				jug_setNacionalidad(this, nacionalidadNueva);
+				retorno = 1;
+			}
 		}
+
 	}
 
 

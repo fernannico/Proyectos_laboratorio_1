@@ -57,7 +57,6 @@ int main()
             	}
             	break;
             case 3://MODIFICACION
-            	///poner cuando el jugador fue bajado (ahora esta como "no existe") como en desconvocados
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
             		controller_editarJugador(listaJugadores);
             	}else{
@@ -65,7 +64,6 @@ int main()
             	}
             	break;
             case 4://BAJA
-            	///poner cuando el jugador fue bajado (ahora esta como "no existe") como en desconvocados
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
             		controller_removerJugador(listaJugadores, listaSelecciones);
             	}else{
@@ -102,28 +100,11 @@ int main()
             		printf("\nLas listas no estan cargadas\n");
             	}
             	break;
-            case 6://CONVOCAR-desconvocar JUGADORES
+            case 6:
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
-//					do {
-						printf("\n1- CONVOCAR"
-								"\n2- QUITAR DE LA SELECCION\n");
-						utn_getNumero(&option, "\nOpcion", "\nError", 1, 2, 1);
-						if(option == 1){
-							///Hacerle las verificaciones.
-							///poner cuando el jugador fue bajado (ahora esta como "no existe") como en desconvocados
-							controller_Convocar(listaJugadores, listaSelecciones);
-						}else{
-							if(option == 2 && selec_verificarConvocados(listaSelecciones)==1){
-								if(controller_desconvocar(listaJugadores, listaSelecciones)==1){
-									printf("\nJugador desconvocado");
-								}
-
-							}else{
-								printf("\nNo hay convocados en ninguna seleccion");
-							}
-						}
-//						seguir = ValidarSeguirNoSeguir("\nConvocar/desConvocar otro jugador? [S|N]", "\nError");
-//					} while (seguir != 'N');
+            		if(controller_convocarDesconvocar(listaJugadores, listaSelecciones)==1){
+            			printf("\nVolviendo al menu principal...");
+            		}
 				}else{
 					printf("\nLas listas no estan cargadas\n");
 				}
@@ -135,12 +116,9 @@ int main()
             		printf("\nLas listas no estan cargadas\n");
             	}
             	break;
-			case 8://8. GENERAR ARCHIVO BINARIO: Generar y guardar en binario una nueva lista que contenga los jugadores convocados de una confederación ingresada por el usuario.
+			case 8:
             	if(ll_isEmpty(listaJugadores)==0 && ll_isEmpty(listaSelecciones)==0){
             		if(selec_verificarConvocados(listaSelecciones)==1){
-            			///habria que validar si esa confederacion tiene convocados y recien ahi crear el archivo
-            			/// esto tendria que ser antes de el controller porque al usar dentro el auxiliar, no se muestran los contadores actualizados
-            			/// selec_seleccionarConfederacion antes del controller?
 						if(controller_guardarJugadoresModoBinario("convocados.dat", listaJugadores)==1){
 							printf("\nLa lista fue creada \n");
 							banderaOpcionOcho = 1;
@@ -152,12 +130,12 @@ int main()
             		printf("\nLas listas no estan cargadas\n");
             	}
 				break;
-			case 9://9. CARGAR ARCHIVO BINARIO: Se deberá leer e imprimir los datos del archivo generado en el punto 8.
+			case 9:
 				if(banderaOpcionOcho == 1){
 					controller_CargarArchivoBinario("convocados.dat", "selecciones.csv");
 				}
 				break;
-			case 10://GUARDAR ARCHIVOS .CSV
+			case 10:
 				if( controller_guardarJugadoresModoTexto("jugadores.csv", listaJugadores)==1 &&
 					controller_guardarSeleccionesModoTexto("selecciones.csv", listaSelecciones)==1){
 					printf("\nGuardando los jugadores en el archivo");
@@ -185,7 +163,6 @@ int main()
 
     return 0;
 }
-
 
 
 
